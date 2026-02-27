@@ -502,9 +502,15 @@ a {
 
 /* Terminal-style progress under Links */
 .terminal-progress {
-    margin-top: 28px;
+    margin-top: 10px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 12px;
+}
+
+.progress-card {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
 }
 
 .terminal-command {

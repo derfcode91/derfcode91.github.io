@@ -299,6 +299,36 @@ a {
     transform: translateY(-1px);
 }
 
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-icon i {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0;
+}
+
+.btn-primary.btn-icon i {
+    background-color: var(--accent-yellow);
+    color: #000;
+}
+
+.btn-ghost.btn-icon i {
+    background-color: transparent;
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+}
+
 .btn-ghost {
     background-color: var(--bg-tertiary);
     border: 1px solid var(--border-color);

@@ -42,7 +42,8 @@
     <p class="page-subtitle">A simple overview of who I am, what I’ve done, and where to find my work.</p>
 
     <div class="grid">
-        <!-- Profile (left, top row) -->
+        <div class="left-column">
+        <!-- Profile -->
         <section id="profile" class="card profile-card">
                 <div class="profile-header">
                     <div class="profile-avatar">
@@ -81,28 +82,7 @@
                 </div>
             </section>
 
-        <!-- Links (right, top row) -->
-        <section class="card links-card">
-            <div class="card-header">
-                <h2 class="card-title">Links</h2>
-            </div>
-            <div class="mini-list">
-                <div class="mini-item">
-                    FAQ? Check my work in the <a href="#portfolio" class="mini-link">Portfolio</a> section.
-                </div>
-                <div class="mini-item">
-                    Want to know more about me? Visit <a href="#profile" class="mini-link">Profile</a>.
-                </div>
-                <div class="mini-item">
-                    Prefer GitHub? See my code at
-                    <a href="https://github.com/derfcode91" class="mini-link" target="_blank" rel="noopener noreferrer">
-                        @derfcode91
-                    </a>.
-                </div>
-            </div>
-        </section>
-
-        <!-- Education (left, below profile) -->
+        <!-- Education -->
         <section id="education" class="card education-card" style="margin-top: 16px;">
                 <div class="card-header">
                     <h2 class="card-title">Education</h2>
@@ -139,7 +119,7 @@
                 </div>
             </section>
 
-        <!-- Portfolio (left, below education) -->
+        <!-- Portfolio -->
         <section id="portfolio" class="card portfolio-card" style="margin-top: 16px;">
                 <div class="card-header">
                     <h2 class="card-title">Portfolio</h2>
@@ -192,12 +172,100 @@
                         <div class="portfolio-title">Final Project • JobOnCampus! 2024</div>
                         <p class="portfolio-text">
                             A simple, student‑friendly platform to improve the on‑campus job system at UTM, with digital
-                            resumes, job alerts, and real‑time updates. Designed to be efficient, transparent, and easy
+                            resumes, job alerts, and real-time updates. Designed to be efficient, transparent, and easy
                             to use.
                         </p>
                     </a>
                 </div>
             </section>
+        </div>
+
+        <div class="right-column">
+        <!-- Links -->
+        <section class="links-card">
+            <div class="card-header">
+                <h2 class="card-title">Links</h2>
+            </div>
+            <div class="mini-list">
+                <div class="mini-item">
+                    FAQ? Check my work in the <a href="#portfolio" class="mini-link">Portfolio</a> section.
+                </div>
+                <div class="mini-item">
+                    Want to know more about me? Visit <a href="#profile" class="mini-link">Profile</a>.
+                </div>
+                <div class="mini-item">
+                    Prefer GitHub? See my code at
+                    <a href="https://github.com/derfcode91" class="mini-link" target="_blank" rel="noopener noreferrer">
+                        @derfcode91
+                    </a>.
+                </div>
+            </div>
+
+            <!-- Bar 1 – green -->
+            <div class="terminal-progress progress-green">
+                <div class="terminal-command">
+                    <span class="terminal-prompt">➜</span>
+                    ./semester-progress 
+                </div>
+                <div class="terminal-progress-row">
+                    <span class="terminal-bracket">[</span>
+                    <div class="terminal-bar">
+                        <div class="terminal-fill" style="width: 87.5%;"></div>
+                    </div>
+                    <span class="terminal-bracket">]</span>
+                    <span class="terminal-percent">87%</span>
+                </div>
+            </div>
+
+            <!-- Bar 2 – orange -->
+            <div class="terminal-progress progress-orange">
+                <div class="terminal-command">
+                    <span class="terminal-prompt">➜</span>
+                    ./carrots-farming
+                </div>
+                <div class="terminal-progress-row">
+                    <span class="terminal-bracket">[</span>
+                    <div class="terminal-bar">
+                        <div class="terminal-fill" style="width: 87.5%;"></div>
+                    </div>
+                    <span class="terminal-bracket">]</span>
+                    <span class="terminal-percent">87%</span>
+                </div>
+            </div>
+
+            <!-- Bar 3 – blue -->
+            <div class="terminal-progress progress-blue">
+                <div class="terminal-command">
+                    <span class="terminal-prompt">➜</span>
+                    ./blue-team-skills
+                </div>
+                <div class="terminal-progress-row">
+                    <span class="terminal-bracket">[</span>
+                    <div class="terminal-bar">
+                        <div class="terminal-fill" style="width: 2%;"></div>
+                    </div>
+                    <span class="terminal-bracket">]</span>
+                    <span class="terminal-percent">2%</span>
+                </div>
+            </div>
+
+            <!-- Bar 4 – red -->
+            <div class="terminal-progress progress-red">
+                <div class="terminal-command">
+                    <span class="terminal-prompt">➜</span>
+                    ./red-team-skills
+                </div>
+                <div class="terminal-progress-row">
+                    <span class="terminal-bracket">[</span>
+                    <div class="terminal-bar">
+                        <div class="terminal-fill" style="width: 25%;"></div>
+                    </div>
+                    <span class="terminal-bracket">]</span>
+                    <span class="terminal-percent">25%</span>
+                </div>
+            </div>
+        </section>
+        </div>
     </div>
 
     <footer class="footer">

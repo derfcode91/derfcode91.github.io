@@ -1,344 +1,767 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danial Erfan Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Danial Erfan • Portfolio</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-hover: #30363d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --accent-yellow: #ffe414;
+            --accent-blue: #58a6ff;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Header */
+        .header {
+            background-color: rgba(13, 17, 23, 0.9);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 20%, #ffe414, #8957e5 40%, #58a6ff 100%);
+            box-shadow: 0 0 0 2px rgba(255, 228, 20, 0.4);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text-main {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .logo-text-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .navbar {
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .social-icon:hover {
+            color: var(--bg-primary);
+            background-color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+        }
+
+        /* Layout */
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 24px auto 40px;
+            padding: 0 16px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* Generic cards */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Profile / Home */
+        .profile-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-tagline {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .profile-highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background-color: rgba(255, 228, 20, 0.1);
+            color: var(--accent-yellow);
+            font-size: 12px;
+        }
+
+        .profile-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-yellow);
+            color: #000;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffe95a;
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-ghost:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--text-secondary);
+        }
+
+        /* Education timeline (simplified stacked cards) */
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Portfolio */
+        .portfolio-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .portfolio-item {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 10px 12px;
+            transition: background 0.2s, border-color 0.2s, transform 0.1s;
+        }
+
+        .portfolio-item:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--text-secondary);
+            transform: translateY(-1px);
+        }
+
+        .portfolio-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 4px;
+        }
+
+        .portfolio-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Team */
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .team-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .team-item:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--text-secondary);
+        }
+
+        .team-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-info-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .team-stars {
+            color: #ffd86b;
+            font-size: 13px;
+        }
+
+        /* Contact */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .input-row {
+                flex-direction: column;
+            }
+        }
+
+        .input,
+        .textarea {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 8px 10px;
+            font-size: 13px;
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .input::placeholder,
+        .textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Right side small cards */
+        .mini-card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mini-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .mini-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .mini-link {
+            font-size: 13px;
+            color: var(--accent-blue);
+            cursor: pointer;
+        }
+
+        .mini-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border-color);
+            padding: 16px 0 24px;
+            margin-top: 32px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+    </style>
 </head>
-
 <body>
-
-    <header class="header">
-        <a href="#home" class="logo">Danial<span>Erfan</span></a>
-
-        <i class='bx bx-menu' id="menu-icon"></i>
-
-        <nav class="navbar">
-            <a href="#home" class="active">Profile</a>
-            <a href="#education">Education</a>
-            <a href="#portfolio">Portfolio</a>
-            <a href="#myteam">MyTeam</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
-
-    <section class="home" id="home">
-        <div class="home-content">
-            <h1>Hi, It's <span>Derf</span></h1>
-            <h3 class="text-animation">I'm a <span></span></h3>
-            <p>I am currently pursuing my studies in Network Security at University Technology Malaysia, where I am
-                dedicated to mastering the complexities of protecting digital information. Alongside my academic
-                pursuits, I am an active member of the university's archery team, competing in various tournaments and
-                honing my skills in precision and focus. In my free time, I enjoy riding my motorbike, finding both
-                relaxation and adventure on the open road as I explore new routes and improve my riding skills. My
-                passion for technology, sports, and motorcycling defines my dynamic and balanced lifestyle.
-            </p>
-
-            <div class="social-icons">
-                <a href="https://www.linkedin.com/in/derf/"><i class='bx bxl-linkedin'></i></a>
-                <a href="https://github.com/derfcode91"><i class='bx bxl-github'></i></a>
-                <a href="https://www.instagram.com/derfquek/"><i class='bx bxl-instagram'></i></a>
-                <a href="https://www.utm.my/"><i class='bx bxs-institution'></i></a>
-            </div>
-
-            <div class="btn-group">
-                <!-- <a href="#" class="btn"></a> -->
-                <a href="#contact" class="btn">Contact</a>
-            </div>
+<header class="header">
+    <div class="header-left">
+        <div class="logo-icon"></div>
+        <div class="logo-text">
+            <span class="logo-text-main">Danial Erfan</span>
+            <span class="logo-text-sub">Network Security • UTM</span>
         </div>
+    </div>
+    <nav class="navbar">
+        <a href="#profile" class="nav-link active">Profile</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#team" class="nav-link">My Team</a>
+        <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="header-right">
+        <a href="https://www.linkedin.com/in/derf/" class="social-icon" aria-label="LinkedIn">
+            <i class='bx bxl-linkedin'></i>
+        </a>
+        <a href="https://github.com/derfcode91" class="social-icon" aria-label="GitHub">
+            <i class='bx bxl-github'></i>
+        </a>
+        <a href="https://www.instagram.com/derfquek/" class="social-icon" aria-label="Instagram">
+            <i class='bx bxl-instagram'></i>
+        </a>
+        <a href="https://www.utm.my/" class="social-icon" aria-label="UTM">
+            <i class='bx bxs-institution'></i>
+        </a>
+    </div>
+</header>
 
-        <div class="home-img">
-            <img src="/gambar/image.jpg" alt="">
-        </div>
-    </section>
+<main class="page-wrapper">
+    <h1 class="page-title">Home</h1>
+    <p class="page-subtitle">A simple overview of who I am, what I’ve done, and where to find my work.</p>
 
-    <section class="education" id="education">
-        <h2 class="heading">Education</h2>
-
-        <div class="timeline-items">
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">2010 - 2015</div>
-                <div class="timeline-content">
-                    <h3>Primary School</h3>
-                    <p>
-                        Attended Sekolah Rendah Islam Hidayah, a distinguished private Islamic school located in Kempas,
-                        Johor. During my time here, I developed a strong foundation in both academic subjects and
-                        Islamic studies, which instilled in me a disciplined approach to education and personal
-                        development.
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">2016 - 2020</div>
-                <div class="timeline-content">
-                    <h3>Secondary School</h3>
-                    <p>Lower Form: Studied at Sekolah Menengah Kebangsaan Johor Bahru. My years at this public
-                        secondary school were marked by active participation in various extracurricular activities,
-                        which helped me develop teamwork and leadership skills.
-                    </p>
-                    <br>
-                    <p>Upper Form: Transferred to Sekolah Menengah Teknik Johor Bahru, where I focused on
-                        mechanical engineering. This specialized technical school provided me with practical knowledge
-                        and hands-on experience in engineering, further nurturing my interest in technical fields.
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">2021</div>
-                <div class="timeline-content">
-                    <h3>Foundation</h3>
-                    <p>
-                        Enrolled in a foundation program at University Technology MARA, Dengkil, specializing in
-                        engineering. This program served as a critical stepping stone, equipping me with the necessary
-                        academic skills and knowledge required for higher education. The rigorous coursework and
-                        challenging projects prepared me well for my undergraduate studies.
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-date">2022 - Present</div>
-                <div class="timeline-content">
-                    <h3>University</h3>
-                    <p>Currently pursuing a degree in Computer Network Security. This program allows me to delve into
-                        the intricacies of cybersecurity, network architecture, and data protection. My coursework
-                        includes advanced subjects such as cryptography, ethical hacking, and network protocols. I am
-                        also involved in various projects that provide practical experience and enhance
-                        my understanding of the field.
-
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="portfolio" id="portfolio">
-        <h2 class="heading">Portfolio</h2>
-        <div class="portfolio-container">
-
-            <a href="https://www.canva.com/design/DAFvQ92PR9Q/PYBOFTZQwZhpia61klmKZg/edit?utm_content=DAFvQ92PR9Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-                style="color: black;">
-
-                <div class="portfoli-box">
-                    <div class="portfoli-info">
-                        <h4>Core</h4>
-                        <p>
-                            This section showcases details about my education, skills, courses, awards, and
-                            certifications.
-                        </p>
+    <div class="grid">
+        <!-- Left column -->
+        <div class="left-column">
+            <!-- Profile -->
+            <section id="profile" class="card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="/gambar/image.jpg" alt="Danial Erfan">
                     </div>
-                </div>
-
-            </a>
-
-
-            <a href="https://drive.google.com/file/d/12P7RNvkvrsKR1KQKt0yxHGhtwm_aG8_y/view?pli=1"
-                style="color: black;">
-                <div class="portfoli-box">
-                    <div class="portfoli-info">
-                        <h4>Assignment 1</h4>
-                        <p>
-                            So for my uni project Website Performance we were required to compare multiple different
-                            websites at the same time,
-                            here is what we got for the report.
-                            Thanks to my group mates for helping out!
-                        </p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://derfquek.tiiny.site/" style="color: black;">
-                <div class="portfoli-box">
-                    <div class="portfoli-info">
-                        <h4>Assignment 2</h4>
-                        <p>
-                            The task is to design and develop only one page of the Personal Website Landing Page using
-                            Hypertext Markup Language (HTML) and Cascading Style Sheets (CSS) Grid layout. This task
-                            need me to use my content also stick with 1 theme and host it using tiiny.host where it
-                            simplest way to host website for free
-                        </p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/derfcode91/my-e-portfolio" style="color: black;">
-                <div class="portfoli-box">
-                    <div class="portfoli-info">
-                        <h4>Assignment 3</h4>
-                        <p>
-                            The task is to design and develop a comprehensive GitHub e-portfolio. This individual
-                            project requires me to showcase my learning progression, achievements, and skills through a
-                            collection of my work, demonstrations, and artifacts. The e-portfolio will include various
-                            sections detailing my profile, assignments, projects, and personal reflections.
-                        </p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://joboncampus.com/" style="color: black;">
-                <div class="portfoli-box">
-                    <div class="portfoli-info">
-                        <h4>Final Project</h4>
-                        <p>
-                            The "JobOnCampus! 2024" project created a simple, user-friendly platform to improve the job system at UTM. It helps students find and apply for on-campus jobs more easily with digital resumes, job alerts, and real-time updates. This platform is efficient and transparent, saving money for the university and improving the job search experience for students. It has received positive feedback for being effective and easy to use.
-                        </p>
-                    </div>
-                </div>
-            </a>
-
-
-
-        </div>
-    </section>
-
-
-    <section class="myteam" id="myteam">
-        <div class="myteam-box">
-            <h2 class="heading">MyTeam</h2>
-
-            <div class="wrapper">
-                <a href="https://ilikeronnnnii.github.io/">
-                    <div class="mytea-item">
-                        <img src="/gambar/1.jpg" alt="">
-                        <h2>Megat</h2>
-                        <div class="rating">
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-
-
+                    <div>
+                        <div class="profile-name">Hi, it’s <span style="color: var(--accent-yellow);">Derf</span></div>
+                        <div class="profile-tagline">Network Security student • Archer • Biker</div>
+                        <div class="profile-highlight">
+                            <i class='bx bx-shield'></i>
+                            Network Security @ UTM
                         </div>
-                        <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis reiciendis unde autem
-                        illum necessitatibus, fuga nesciunt sequi alias provident repellendus asperiores quidem repellat
-                        eum, voluptatum nisi aut cumque commodi maiores.</p> -->
                     </div>
-
-                </a>
-
-
-                <div class="mytea-item">
-                    <img src="/gambar/2.jpg" alt="">
-                    <h2>Nabil</h2>
-                    <div class="rating">
-                        <i class='bx bxs-star' id="star"></i>
-                        <i class='bx bxs-star' id="star"></i>
-                        <i class='bx bxs-star' id="star"></i>
-                        <i class='bx bxs-star' id="star"></i>
-                        <i class='bx bxs-star' id="star"></i>
-
-                    </div>
-                    <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis reiciendis unde autem
-                        illum necessitatibus, fuga nesciunt sequi alias provident repellendus asperiores quidem repellat
-                        eum, voluptatum nisi aut cumque commodi maiores.</p> -->
                 </div>
 
-                <a href="https://ariffikrykharizan.github.io/">
+                <p class="profile-text">
+                    I am currently studying Network Security at Universiti Teknologi Malaysia, focusing on how to protect
+                    digital information and secure modern networks. I’m also part of the university archery team and
+                    enjoy riding my motorbike in my free time. My passion for technology, sports, and motorcycling keeps
+                    my life balanced and dynamic.
+                </p>
 
-                    <div class="mytea-item">
-                        <img src="/gambar/3.jpg" alt="">
-                        <h2>Arif</h2>
-                        <div class="rating">
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
-                            <i class='bx bxs-star' id="star"></i>
+                <div class="profile-actions">
+                    <a href="#contact"><button class="btn-primary">Contact me</button></a>
+                    <a href="#portfolio"><button class="btn-ghost">View portfolio</button></a>
+                </div>
+            </section>
 
-                        </div>
-                        <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis reiciendis unde autem
-                        illum necessitatibus, fuga nesciunt sequi alias provident repellendus asperiores quidem repellat
-                        eum, voluptatum nisi aut cumque commodi maiores.</p> -->
+            <!-- Education -->
+            <section id="education" class="card" style="margin-top: 16px;">
+                <div class="card-header">
+                    <h2 class="card-title">Education</h2>
+                </div>
+                <div class="timeline-list">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2010 – 2015</div>
+                        <div class="timeline-title">Primary School • Sekolah Rendah Islam Hidayah</div>
+                        <p class="timeline-text">
+                            Built a strong foundation in academics and Islamic studies, which shaped my discipline and
+                            personal development from an early age.
+                        </p>
                     </div>
 
+                    <div class="timeline-item">
+                        <div class="timeline-date">2016 – 2020</div>
+                        <div class="timeline-title">Secondary School • SMK Johor Bahru & SMT Johor Bahru</div>
+                        <p class="timeline-text">
+                            Started at SMK Johor Bahru, actively joining co-curricular activities and growing my teamwork
+                            and leadership skills. Later focused on mechanical engineering at Sekolah Menengah Teknik
+                            Johor Bahru, gaining hands‑on technical experience.
+                        </p>
+                    </div>
 
-                </a>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021</div>
+                        <div class="timeline-title">Foundation • UiTM Dengkil</div>
+                        <p class="timeline-text">
+                            Completed a foundation programme in engineering at UiTM Dengkil, strengthening my academic
+                            skills and preparing me for degree‑level studies through rigorous coursework and projects.
+                        </p>
+                    </div>
 
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022 – Present</div>
+                        <div class="timeline-title">Bachelor • Computer Network Security</div>
+                        <p class="timeline-text">
+                            Currently exploring cybersecurity, cryptography, ethical hacking, and network protocols.
+                            Working on projects that provide practical experience and deepen my understanding of how to
+                            secure real-world systems.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
+            <!-- Portfolio -->
+            <section id="portfolio" class="card" style="margin-top: 16px;">
+                <div class="card-header">
+                    <h2 class="card-title">Portfolio</h2>
+                    <span class="card-subtitle">Selected academic work & projects</span>
+                </div>
 
-            </div>
+                <div class="portfolio-grid">
+                    <a class="portfolio-item"
+                       href="https://www.canva.com/design/DAFvQ92PR9Q/PYBOFTZQwZhpia61klmKZg/edit?utm_content=DAFvQ92PR9Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+                       target="_blank" rel="noopener noreferrer">
+                        <div class="portfolio-title">Core</div>
+                        <p class="portfolio-text">
+                            Overview of my education, skills, courses, awards, and certifications in one place.
+                        </p>
+                    </a>
+
+                    <a class="portfolio-item"
+                       href="https://drive.google.com/file/d/12P7RNvkvrsKR1KQKt0yxHGhtwm_aG8_y/view?pli=1"
+                       target="_blank" rel="noopener noreferrer">
+                        <div class="portfolio-title">Assignment 1 • Website Performance Report</div>
+                        <p class="portfolio-text">
+                            Comparative analysis of multiple websites focusing on performance and user experience,
+                            completed together with my group.
+                        </p>
+                    </a>
+
+                    <a class="portfolio-item"
+                       href="https://derfquek.tiiny.site/"
+                       target="_blank" rel="noopener noreferrer">
+                        <div class="portfolio-title">Assignment 2 • Personal Landing Page</div>
+                        <p class="portfolio-text">
+                            A one‑page personal website using HTML and CSS Grid with a consistent theme, hosted on
+                            tiiny.host.
+                        </p>
+                    </a>
+
+                    <a class="portfolio-item"
+                       href="https://github.com/derfcode91/my-e-portfolio"
+                       target="_blank" rel="noopener noreferrer">
+                        <div class="portfolio-title">Assignment 3 • GitHub E‑Portfolio</div>
+                        <p class="portfolio-text">
+                            A comprehensive GitHub e‑portfolio documenting my learning journey, assignments, projects,
+                            and personal reflections.
+                        </p>
+                    </a>
+
+                    <a class="portfolio-item"
+                       href="https://joboncampus.com/"
+                       target="_blank" rel="noopener noreferrer">
+                        <div class="portfolio-title">Final Project • JobOnCampus! 2024</div>
+                        <p class="portfolio-text">
+                            A simple, student‑friendly platform to improve the on‑campus job system at UTM, with digital
+                            resumes, job alerts, and real‑time updates. Designed to be efficient, transparent, and easy
+                            to use.
+                        </p>
+                    </a>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <section class="contact" id="contact">
-        <h2 class="heading">Contact <span>Me</span></h2>
-
-        <form action="">
-            <div class="input-group">
-                <div class="input-box">
-                    <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Email">
+        <!-- Right column -->
+        <div class="right-column">
+            <!-- Team -->
+            <section id="team" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Team</h2>
+                    <span class="card-subtitle">Friends I collaborate with</span>
                 </div>
-                <div class="input-box">
-                    <input type="number" placeholder="Phone Number">
-                    <input type="text" placeholder="Subject">
-                </div>
-            </div>
 
-            <div class="input-group-2">
-                <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
-                <input type="submit" value="Send Message" class="btn">
-            </div>
-        </form>
-    </section>
+                <div class="team-grid">
+                    <a class="team-item" href="https://ilikeronnnnii.github.io/" target="_blank" rel="noopener noreferrer">
+                        <div class="team-avatar">
+                            <img src="/gambar/1.jpg" alt="Megat">
+                        </div>
+                        <div>
+                            <div class="team-info-name">Megat</div>
+                            <div class="team-stars">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="team-item">
+                        <div class="team-avatar">
+                            <img src="/gambar/2.jpg" alt="Nabil">
+                        </div>
+                        <div>
+                            <div class="team-info-name">Nabil</div>
+                            <div class="team-stars">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a class="team-item" href="https://ariffikrykharizan.github.io/" target="_blank" rel="noopener noreferrer">
+                        <div class="team-avatar">
+                            <img src="/gambar/3.jpg" alt="Arif">
+                        </div>
+                        <div>
+                            <div class="team-info-name">Arif</div>
+                            <div class="team-stars">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact" class="card" style="margin-top: 16px;">
+                <div class="card-header">
+                    <h2 class="card-title">Contact</h2>
+                    <span class="card-subtitle">Reach out for collaborations or questions</span>
+                </div>
+
+                <form class="contact-form" action="#">
+                    <div class="input-row">
+                        <input class="input" type="text" placeholder="Full name">
+                        <input class="input" type="email" placeholder="Email">
+                    </div>
+                    <div class="input-row">
+                        <input class="input" type="text" placeholder="Phone number">
+                        <input class="input" type="text" placeholder="Subject">
+                    </div>
+                    <textarea class="textarea" placeholder="Your message"></textarea>
+                    <button type="submit" class="btn-primary">Send message</button>
+                </form>
+            </section>
+
+            <!-- Quick links / footer-like info -->
+            <section class="card" style="margin-top: 16px;">
+                <div class="card-header">
+                    <h2 class="card-title">Links</h2>
+                </div>
+                <div class="mini-list">
+                    <div class="mini-item">
+                        FAQ? Check my work in the <a href="#portfolio" class="mini-link">Portfolio</a> section.
+                    </div>
+                    <div class="mini-item">
+                        Want to know more about me? Visit <a href="#profile" class="mini-link">Profile</a>.
+                    </div>
+                    <div class="mini-item">
+                        Prefer GitHub? See my code at
+                        <a href="https://github.com/derfcode91" class="mini-link" target="_blank" rel="noopener noreferrer">
+                            @derfcode91
+                        </a>.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 
     <footer class="footer">
-        <div class="social">
-            <a href="https://www.linkedin.com/in/derf/"><i class='bx bxl-linkedin'></i></a>
-            <a href="https://github.com/derfcode91"><i class='bx bxl-github'></i></a>
-            <a href="https://www.instagram.com/derfquek/"><i class='bx bxl-instagram'></i></a>
-            <a href="https://www.utm.my/"><i class='bx bxs-institution'></i></a>
-        </div>
-
-        <ul class="list">
-            <li>
-                <a href="#">FAQ</a>
-            </li>
-
-            <li>
-                <a href="#portfolio">Portfolio</a>
-            </li>
-
-            <li>
-                <a href="#home">About Me</a>
-            </li>
-
-            <li>
-                <a href="#contact">Contact</a>
-            </li>
-
-            <li>
-                <a href="#myteam">MyTeam</a>
-            </li>
-        </ul>
-
-
-        <p class="copyright">
-            @ Danial Erfan | All Rights Reserved
-        </p>
-
-
+        © Danial Erfan • All rights reserved
     </footer>
+</main>
 
-
-    <script src="script.js"></script>
+<script>
+    // Simple nav active state on click
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+</script>
 </body>
-
 </html>

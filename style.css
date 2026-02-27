@@ -53,11 +53,13 @@ a {
 }
 
 .logo-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 20%, #ffe414, #8957e5 40%, #58a6ff 100%);
-    box-shadow: 0 0 0 2px rgba(255, 228, 20, 0.4);
+    width: 50px;
+    height: 50px;
+    border-radius: 0;
+    display: block;
+    object-fit: contain;
+    align-self: flex-end;
+    margin-top: 8px;
 }
 
 .logo-text {
@@ -142,6 +144,53 @@ a {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     gap: 16px;
+    align-items: start;
+}
+
+.profile-card {
+    grid-column: 1 / 2;
+    grid-row: 1;
+}
+
+.links-card {
+    grid-column: 2 / 3;
+    grid-row: 1;
+}
+
+.education-card {
+    grid-column: 1 / 2;
+    grid-row: 2;
+}
+
+.portfolio-card {
+    grid-column: 1 / 2;
+    grid-row: 3;
+}
+
+@media (max-width: 900px) {
+    .profile-card,
+    .links-card,
+    .education-card,
+    .portfolio-card {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+    .profile-card {
+        order: 1;
+    }
+
+    .education-card {
+        order: 2;
+    }
+
+    .portfolio-card {
+        order: 3;
+    }
+
+    .links-card {
+        order: 4;
+    }
 }
 
 @media (max-width: 900px) {

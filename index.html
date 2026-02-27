@@ -10,7 +10,7 @@
 <body>
 <header class="header">
     <div class="header-left">
-        <div class="logo-icon"></div>
+        <img src="/gambar/bunny_ready.gif" alt="Bunny logo" class="logo-icon">
         <div class="logo-text">
             <span class="logo-text-main">Danial Erfan</span>
             <span class="logo-text-sub">Network Security • UTM</span>
@@ -42,10 +42,8 @@
     <p class="page-subtitle">A simple overview of who I am, what I’ve done, and where to find my work.</p>
 
     <div class="grid">
-        <!-- Left column -->
-        <div class="left-column">
-            <!-- Profile -->
-            <section id="profile" class="card">
+        <!-- Profile (left, top row) -->
+        <section id="profile" class="card profile-card">
                 <div class="profile-header">
                     <div class="profile-avatar">
                         <img src="/gambar/image.jpg" alt="Danial Erfan">
@@ -75,8 +73,29 @@
                 </div>
             </section>
 
-            <!-- Education -->
-            <section id="education" class="card" style="margin-top: 16px;">
+        <!-- Links (right, top row) -->
+        <section class="card links-card">
+            <div class="card-header">
+                <h2 class="card-title">Links</h2>
+            </div>
+            <div class="mini-list">
+                <div class="mini-item">
+                    FAQ? Check my work in the <a href="#portfolio" class="mini-link">Portfolio</a> section.
+                </div>
+                <div class="mini-item">
+                    Want to know more about me? Visit <a href="#profile" class="mini-link">Profile</a>.
+                </div>
+                <div class="mini-item">
+                    Prefer GitHub? See my code at
+                    <a href="https://github.com/derfcode91" class="mini-link" target="_blank" rel="noopener noreferrer">
+                        @derfcode91
+                    </a>.
+                </div>
+            </div>
+        </section>
+
+        <!-- Education (left, below profile) -->
+        <section id="education" class="card education-card" style="margin-top: 16px;">
                 <div class="card-header">
                     <h2 class="card-title">Education</h2>
                 </div>
@@ -121,8 +140,8 @@
                 </div>
             </section>
 
-            <!-- Portfolio -->
-            <section id="portfolio" class="card" style="margin-top: 16px;">
+        <!-- Portfolio (left, below education) -->
+        <section id="portfolio" class="card portfolio-card" style="margin-top: 16px;">
                 <div class="card-header">
                     <h2 class="card-title">Portfolio</h2>
                     <span class="card-subtitle">Selected academic work & projects</span>
@@ -180,31 +199,6 @@
                     </a>
                 </div>
             </section>
-        </div>
-
-        <!-- Right column -->
-        <div class="right-column">
-            <!-- Quick links / footer-like info -->
-            <section class="card" style="margin-top: 16px;">
-                <div class="card-header">
-                    <h2 class="card-title">Links</h2>
-                </div>
-                <div class="mini-list">
-                    <div class="mini-item">
-                        FAQ? Check my work in the <a href="#portfolio" class="mini-link">Portfolio</a> section.
-                    </div>
-                    <div class="mini-item">
-                        Want to know more about me? Visit <a href="#profile" class="mini-link">Profile</a>.
-                    </div>
-                    <div class="mini-item">
-                        Prefer GitHub? See my code at
-                        <a href="https://github.com/derfcode91" class="mini-link" target="_blank" rel="noopener noreferrer">
-                            @derfcode91
-                        </a>.
-                    </div>
-                </div>
-            </section>
-        </div>
     </div>
 
     <footer class="footer">

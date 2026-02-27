@@ -8,3 +8,18 @@ navLinks.forEach(link => {
   });
 });
 
+// Internship image lightbox
+const internshipImg = document.querySelector('.internship-image');
+const internshipLightbox = document.getElementById('internshipLightbox');
+
+if (internshipImg && internshipLightbox) {
+  internshipImg.style.cursor = 'zoom-in';
+
+  internshipImg.addEventListener('click', () => {
+    internshipLightbox.classList.add('open');
+  });
+
+  internshipLightbox.addEventListener('click', () => {
+    internshipLightbox.classList.remove('open');
+  });
+}

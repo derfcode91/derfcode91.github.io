@@ -313,36 +313,50 @@
 
     function runWithToken(token) {
         showLoading();
+        // Use only endpoints still available after Feb 2026: GET /me, GET /me/top/{type}
         Promise.all([getMe(token), getTopArtists(token), getTopTracks(token)])
             .then(function (results) {
                 var me = results[0];
                 var artistsRes = results[1];
                 var tracksRes = results[2];
                 var panelName = document.getElementById('spotify-panel-name');
-                if (panelName && me.display_name) panelName.textContent = 'Top artists for ' + me.display_name;
+                if (panelName && me && me.display_name) panelName.textContent = 'Top artists for ' + me.display_name;
                 var artists = (artistsRes.items || []).slice(0, 5);
-                var tracks = tracksRes.items || [];
+                var tracks = (tracksRes.items || []);
                 var trackIds = tracks.map(function (t) { return t.id; }).filter(Boolean);
 
+                // Audio features endpoint may be restricted after API changes – try but don’t fail the whole flow
                 var chunkSize = 100;
                 var promises = [];
                 for (var i = 0; i < trackIds.length; i += chunkSize) {
                     promises.push(getAudioFeatures(token, trackIds.slice(i, i + chunkSize)));
                 }
-                return Promise.all(promises).then(function (featureResponses) {
-                    var allFeatures = [];
-                    featureResponses.forEach(function (r) {
-                        (r.audio_features || []).forEach(function (f) {
-                            if (f) allFeatures.push(f);
+                return Promise.all(promises)
+                    .then(function (featureResponses) {
+                        var allFeatures = [];
+                        featureResponses.forEach(function (r) {
+                            (r.audio_features || []).forEach(function (f) {
+                                if (f) allFeatures.push(f);
+                            });
                         });
+                        return { artists: artists, avgFeatures: normalizeFeatures(allFeatures) };
+                    })
+                    .catch(function () {
+                        return { artists: artists, avgFeatures: null };
                     });
-                    var avgFeatures = normalizeFeatures(allFeatures);
-                    return { artists: artists, avgFeatures: avgFeatures };
-                });
             })
             .then(function (data) {
                 renderArtists(data.artists);
-                drawRadar('spotify-radar', data.avgFeatures);
+                var canvas = document.getElementById('spotify-radar');
+                var fallback = document.getElementById('spotify-radar-fallback');
+                if (data.avgFeatures) {
+                    drawRadar('spotify-radar', data.avgFeatures);
+                    if (canvas) canvas.style.display = '';
+                    if (fallback) fallback.style.display = 'none';
+                } else {
+                    if (canvas) canvas.style.display = 'none';
+                    if (fallback) fallback.style.display = '';
+                }
                 showContent();
             })
             .catch(function (err) {

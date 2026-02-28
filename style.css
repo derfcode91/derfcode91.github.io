@@ -906,6 +906,13 @@ a {
     max-width: 100%;
     height: auto;
 }
+.spotify-radar-fallback {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 24px 16px;
+}
 .spotify-loading,
 .spotify-error-wrap {
     padding: 16px 0;

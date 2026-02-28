@@ -69,6 +69,7 @@
                     <p class="spotify-panel-desc">Averages from your top tracks (energy, danceability, etc.).</p>
                     <div id="spotify-radar-wrap" class="spotify-radar-wrap">
                         <canvas id="spotify-radar" class="spotify-radar" width="400" height="400"></canvas>
+                        <p id="spotify-radar-fallback" class="spotify-radar-fallback" style="display: none;">Music taste graph is not available with the current Spotify Web API.</p>
                     </div>
                 </div>
             </div>
@@ -120,7 +121,7 @@
     window.SPOTIFY_CLIENT_ID = 'ea331abd4ac34b3c8c636d648b7936c6'; // e.g. 'your-client-id'
     window.SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
 </script>
-<script src="spotify-vibes.js"></script>
+<script src="spotify-vibes.js?v=2"></script>
 <script src="epl.js"></script>
 <script src="script.js"></script>
 </body>

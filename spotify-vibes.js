@@ -182,6 +182,11 @@
         return apiFetch('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=short_term', token);
     }
 
+    function getArtist(token, id) {
+        if (!id) return Promise.resolve(null);
+        return apiFetch('https://api.spotify.com/v1/artists/' + encodeURIComponent(id), token);
+    }
+
     function getAudioFeatures(token, ids) {
         if (!ids.length) return Promise.resolve({ audio_features: [] });
         return apiFetch('https://api.spotify.com/v1/audio-features?ids=' + ids.join(','), token);
@@ -237,7 +242,7 @@
         if (!container) return;
         var list = getGenresFromArtists(artists);
         if (!list.length) {
-            container.innerHTML = '<p class="spotify-genres-empty">No genre data from top artists.</p>';
+            container.innerHTML = '<p class="spotify-genres-empty">Genre data isn’t available for your top artists right now.</p>';
             return;
         }
         container.innerHTML = list.map(function (g) {
@@ -371,7 +376,13 @@
                         return { artists: artists, avgFeatures: normalizeFeatures(allFeatures) };
                     })
                     .catch(function () {
-                        return { artists: artists, avgFeatures: null };
+                        // Fetch full artist details (GET /artists/{id}) so we get genres; top/artists may omit them
+                        var ids = artists.map(function (a) { return a.id; }).filter(Boolean);
+                        return Promise.all(ids.map(function (id) {
+                            return getArtist(token, id).catch(function () { return null; });
+                        })).then(function (fullArtists) {
+                            return { artists: artists, avgFeatures: null, artistsForGenres: fullArtists.filter(Boolean) };
+                        });
                     });
             })
             .then(function (data) {
@@ -388,7 +399,7 @@
                     if (canvas) canvas.style.display = 'none';
                     if (genresWrap) {
                         genresWrap.style.display = '';
-                        renderGenres(data.artists);
+                        renderGenres(data.artistsForGenres && data.artistsForGenres.length ? data.artistsForGenres : data.artists);
                     }
                     if (tasteDesc) tasteDesc.textContent = 'Based on genres from your top artists.';
                 }

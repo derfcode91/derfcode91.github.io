@@ -44,27 +44,27 @@
     <section class="card spotify-section" style="margin-top: 16px;">
         <div class="card-header">
             <h2 class="card-title spotify-title">
-                <i class='bx bxl-spotify' style="color: #1db954; font-size: 28px;"></i>
-                My Music Vibe
+                <span id="spotify-header-logo" class="spotify-logo-wrap"></span>
+                My Music
             </h2>
             <span class="card-subtitle spotify-attribution">Top artists · Most played · <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="mini-link">Spotify API</a></span>
         </div>
         <div id="spotify-connect-wrap" class="spotify-connect-wrap">
-            <p class="spotify-connect-text">Connect your Spotify to show your top 5 artists and most played tracks.</p>
+            <p class="spotify-connect-text">Connect your Spotify to show your top 6 artists and most played tracks.</p>
             <button type="button" id="spotify-connect-btn" class="btn-primary btn-spotify">
-                <i class='bx bxl-spotify'></i> Connect Spotify
+                <span id="spotify-btn-logo" class="spotify-btn-logo"></span> Connect Spotify
             </button>
         </div>
         <div id="spotify-content" class="spotify-content" style="display: none;">
             <div class="spotify-grid">
                 <div class="spotify-left">
-                    <h3 class="spotify-panel-title">MADE FOR YOU</h3>
+                    <h3 class="spotify-panel-title">MADE FOR DERF</h3>
                     <h4 class="spotify-panel-name" id="spotify-panel-name">Your Top Artists</h4>
-                    <p class="spotify-panel-desc">Your top 5 artists based on recent listening.</p>
+                    <p class="spotify-panel-desc">Your top 6 artists based on recent listening.</p>
                     <div id="spotify-artists" class="spotify-artists"></div>
                 </div>
                 <div class="spotify-right">
-                    <h3 class="spotify-panel-title">MADE FOR YOU</h3>
+                    <h3 class="spotify-panel-title">MADE FOR DERF</h3>
                     <h4 class="spotify-panel-name" id="spotify-mostplayed-name">Most played</h4>
                     <p class="spotify-panel-desc">Your most played tracks based on recent listening.</p>
                     <div id="spotify-tracks-grid" class="spotify-tracks-grid"></div>
@@ -127,6 +127,8 @@
     // Spotify: create an app at https://developer.spotify.com/dashboard and set Redirect URI to this page.
     window.SPOTIFY_CLIENT_ID = 'ea331abd4ac34b3c8c636d648b7936c6'; // e.g. 'your-client-id'
     window.SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
+    // Optional: use your own logo image (e.g. after uploading to /gambar/spotify-logo.png)
+    window.SPOTIFY_LOGO_URL = 'gambar/spotify-logo.png';
 </script>
 <script src="spotify-vibes.js?v=2"></script>
 <script src="epl.js"></script>

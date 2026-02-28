@@ -6,6 +6,7 @@
     var REFRESH_TOKEN_KEY = 'spotify_vibes_refresh_token';
     var PKCE_VERIFIER_KEY = 'spotify_vibes_code_verifier';
     var STATIC_VIBES_JSON = (typeof window !== 'undefined' && window.SPOTIFY_VIBES_JSON) ? String(window.SPOTIFY_VIBES_JSON).trim() : 'data/spotify-vibes.json';
+    var LOGO_URL = (typeof window !== 'undefined' && window.SPOTIFY_LOGO_URL) ? String(window.SPOTIFY_LOGO_URL).trim() : '';
 
     var RADAR_LABELS = [
         'acousticness',
@@ -208,7 +209,7 @@
     }
 
     function getTopArtists(token) {
-        return apiFetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=short_term', token);
+        return apiFetch('https://api.spotify.com/v1/me/top/artists?limit=6&time_range=short_term', token);
     }
 
     function getTopTracks(token) {
@@ -315,7 +316,7 @@
     function renderArtists(artists) {
         var container = document.getElementById('spotify-artists');
         if (!container) return;
-        container.innerHTML = artists.slice(0, 5).map(function (a) {
+        container.innerHTML = artists.slice(0, 6).map(function (a) {
             var img = (a.images && a.images[0] && a.images[0].url) ? a.images[0].url : '';
             var url = (a.external_urls && a.external_urls.spotify) ? a.external_urls.spotify : '#';
             var name = (a.name || 'Artist').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -416,7 +417,7 @@
                 var tracksRes = results[2];
                 var panelName = document.getElementById('spotify-panel-name');
                 if (panelName && me && me.display_name) panelName.textContent = 'Top artists for ' + me.display_name;
-                var artists = (artistsRes.items || []).slice(0, 5);
+                var artists = (artistsRes.items || []).slice(0, 6);
                 var tracks = (tracksRes.items || []);
                 var trackIds = tracks.map(function (t) { return t.id; }).filter(Boolean);
 
@@ -516,7 +517,22 @@
         URL.revokeObjectURL(a.href);
     }
 
+    function renderSpotifyLogo() {
+        var html = LOGO_URL
+            ? '<img src="' + LOGO_URL.replace(/"/g, '&quot;') + '" alt="Spotify" class="spotify-logo-img epl-style-logo">'
+            : '<i class="bx bxl-spotify" style="color: #1db954; font-size: 28px;"></i>';
+        var headerLogo = document.getElementById('spotify-header-logo');
+        if (headerLogo) headerLogo.innerHTML = html;
+        var btnLogo = document.getElementById('spotify-btn-logo');
+        if (btnLogo) {
+            btnLogo.innerHTML = LOGO_URL
+                ? '<img src="' + LOGO_URL.replace(/"/g, '&quot;') + '" alt="" class="spotify-btn-logo-img">'
+                : '<i class="bx bxl-spotify"></i>';
+        }
+    }
+
     function init() {
+        renderSpotifyLogo();
         var connectBtn = document.getElementById('spotify-connect-btn');
         if (connectBtn) connectBtn.addEventListener('click', connectClick);
         var tryAgainBtn = document.getElementById('spotify-try-again-btn');

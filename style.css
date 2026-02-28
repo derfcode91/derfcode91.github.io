@@ -803,6 +803,37 @@ a {
     align-items: center;
     gap: 10px;
 }
+.spotify-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+/* EPL-style: white square box, 48x48, like Premier League logo */
+.spotify-logo-wrap .spotify-logo-img.epl-style-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: #fff;
+    padding: 6px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.spotify-logo-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+.spotify-btn-logo-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.spotify-btn-logo .bx {
+    margin-right: 6px;
+}
 .spotify-attribution {
     font-size: 12px;
     color: var(--text-secondary);

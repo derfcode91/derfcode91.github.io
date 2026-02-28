@@ -48,7 +48,7 @@ async function main() {
   const token = await getAccessToken();
   const [me, artistsRes, tracksRes] = await Promise.all([
     apiGet('https://api.spotify.com/v1/me', token),
-    apiGet('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=short_term', token),
+    apiGet('https://api.spotify.com/v1/me/top/artists?limit=6&time_range=short_term', token),
     apiGet('https://api.spotify.com/v1/me/top/tracks?limit=6&time_range=short_term', token),
   ]);
 

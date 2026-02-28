@@ -5,15 +5,16 @@
 }
 
 :root {
-    --bg-primary: #0d1117;
-    --bg-secondary: #161b22;
-    --bg-tertiary: #21262d;
-    --bg-hover: #30363d;
-    --border-color: #30363d;
-    --text-primary: #e6edf3;
-    --text-secondary: #7d8590;
+    /* Neon Pink Dark theme – slightly pink (progress bar & objective tree unchanged) */
+    --bg-primary: #1a0a14;
+    --bg-secondary: #2d0a1e;
+    --bg-tertiary: #3d1228;
+    --bg-hover: #4a1535;
+    --border-color: #5c1f45;
+    --text-primary: #f5e8f0;
+    --text-secondary: #c490b0;
     --accent-yellow: #ffe414;
-    --accent-blue: #58a6ff;
+    --accent-neon: #e040e0;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
@@ -34,7 +35,7 @@ a {
 
 /* Header */
 .header {
-    background-color: rgba(13, 17, 23, 0.9);
+    background-color: rgba(26, 10, 20, 0.92);
     border-bottom: 1px solid var(--border-color);
     padding: 8px 16px;
     display: flex;
@@ -117,8 +118,8 @@ a {
 
 .social-icon:hover {
     color: var(--bg-primary);
-    background-color: var(--accent-yellow);
-    border-color: var(--accent-yellow);
+    background-color: var(--accent-neon);
+    border-color: var(--accent-neon);
 }
 
 /* Layout */
@@ -235,8 +236,9 @@ a {
     margin-top: 8px;
     padding: 2px 8px;
     border-radius: 999px;
-    background-color: rgba(255, 228, 20, 0.1);
+    background-color: rgba(255, 228, 20, 0.12);
     color: var(--accent-yellow);
+    border: 1px solid rgba(255, 228, 20, 0.35);
     font-size: 12px;
 }
 
@@ -371,40 +373,6 @@ a {
     color: var(--text-secondary);
 }
 
-/* Portfolio */
-.portfolio-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 4px;
-}
-
-.portfolio-item {
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 10px 12px;
-    transition: background 0.2s, border-color 0.2s, transform 0.1s;
-}
-
-.portfolio-item:hover {
-    background-color: var(--bg-hover);
-    border-color: var(--text-secondary);
-    transform: translateY(-1px);
-}
-
-.portfolio-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--accent-blue);
-    margin-bottom: 4px;
-}
-
-.portfolio-text {
-    font-size: 13px;
-    color: var(--text-secondary);
-}
-
 /* Internship */
 .internship-grid {
     display: flex;
@@ -495,102 +463,7 @@ a {
     color: var(--text-secondary);
 }
 
-/* Team */
-.team-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 4px;
-}
-
-.team-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    padding: 8px 10px;
-    transition: background 0.2s, border-color 0.2s;
-}
-
-.team-item:hover {
-    background-color: var(--bg-hover);
-    border-color: var(--text-secondary);
-}
-
-.team-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    flex-shrink: 0;
-}
-
-.team-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.team-info-name {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.team-stars {
-    color: #ffd86b;
-    font-size: 13px;
-}
-
-/* Contact */
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 4px;
-}
-
-.input-row {
-    display: flex;
-    gap: 10px;
-}
-
-@media (max-width: 600px) {
-    .input-row {
-        flex-direction: column;
-    }
-}
-
-.input,
-.textarea {
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 8px 10px;
-    font-size: 13px;
-    color: var(--text-primary);
-    width: 100%;
-}
-
-.input::placeholder,
-.textarea::placeholder {
-    color: var(--text-secondary);
-}
-
-.textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Right side small cards */
-.mini-card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
+/* Right side – Links list */
 .mini-list {
     display: flex;
     flex-direction: column;
@@ -606,7 +479,7 @@ a {
 
 .mini-link {
     font-size: 13px;
-    color: var(--accent-blue);
+    color: var(--accent-neon);
     cursor: pointer;
 }
 
@@ -702,6 +575,48 @@ a {
     color: #f85149;
 }
 
+/* Objective tree (right side, below progress) */
+.objective-tree-card {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.objective-tree-card .tree {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+.objective-tree-card .tree-line {
+    margin: 2px 0;
+}
+
+.objective-tree-card .tree-header {
+    color: #d2a8ff;
+    font-weight: 600;
+}
+
+.objective-tree-card .tree-category {
+    color: #79c0ff;
+    font-weight: 500;
+    margin-top: 6px;
+    display: block;
+}
+
+.objective-tree-card .tree-completed {
+    color: #7ee787;
+}
+
+.objective-tree-card .tree-pending {
+    color: #8b949e;
+}
+
+.objective-tree-card .tree-in-progress {
+    color: #ffa657;
+}
 
 /* Footer */
 .footer {

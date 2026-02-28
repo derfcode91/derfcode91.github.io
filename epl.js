@@ -1,17 +1,4 @@
 (function () {
-    var API_BASE = 'https://api.football-data.org/v4';
-    var PL_STANDINGS = API_BASE + '/competitions/PL/standings';
-
-    function getApiKey() {
-        var k = window.FOOTBALL_DATA_API_KEY;
-        return (k != null && k !== '') ? String(k).trim() : '';
-    }
-
-    function getProxyUrl() {
-        var u = window.EPL_PROXY_URL;
-        return (u != null && u !== '') ? String(u).trim() : '';
-    }
-
     function getStaticJsonPath() {
         var p = window.EPL_STANDINGS_JSON;
         return (p != null && p !== '') ? String(p).trim() : '';
@@ -70,7 +57,7 @@
         return '<div class="epl-form">' + html + '</div>';
     }
 
-    function renderRow(row, index) {
+    function renderRow(row) {
         var pos = row.position;
         var team = row.team || {};
         var crest = team.crest || '';
@@ -112,25 +99,19 @@
         if (!tbody) return;
 
         var staticPath = getStaticJsonPath();
-        var proxyUrl = getProxyUrl();
-        var key = getApiKey();
-        if (!staticPath && !proxyUrl && !key) {
-            showError('Set EPL_STANDINGS_JSON (e.g. data/epl-standings.json) or add FOOTBALL_DATA_API_KEY and run the GitHub Action once.');
+        if (!staticPath) {
+            showError('Set EPL_STANDINGS_JSON in my-vibes.html (e.g. data/epl-standings.json). Run the "Update EPL standings" workflow once.');
             return;
         }
 
         showLoading();
 
-        var fetchUrl = staticPath || proxyUrl || PL_STANDINGS;
-        var fetchOpts = { method: 'GET' };
-        if (!staticPath && !proxyUrl && key) fetchOpts.headers = { 'X-Auth-Token': key };
+        var fetchUrl = staticPath + (staticPath.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
 
-        fetch(fetchUrl, fetchOpts)
+        fetch(fetchUrl, { method: 'GET' })
             .then(function (res) {
                 if (!res.ok) {
-                    if (res.status === 404 && staticPath) return Promise.reject(new Error('Standings file not ready yet. Run the "Update EPL standings" workflow once (Actions tab), or wait for the next scheduled update.'));
-                    if (res.status === 401) return Promise.reject(new Error('Invalid API key'));
-                    if (res.status === 429) return Promise.reject(new Error('Too many requests; try again later'));
+                    if (res.status === 404) return Promise.reject(new Error('Standings file not ready. Run the "Update EPL standings" workflow once (Actions tab).'));
                     return res.json().then(function (data) { throw new Error(data.message || 'Request failed'); }).catch(function (e) {
                         if (e.message) throw e;
                         throw new Error('Request failed: ' + res.status);
@@ -140,15 +121,13 @@
             })
             .then(function (data) {
                 var table = (data.standings && data.standings[0] && data.standings[0].table) ? data.standings[0].table : [];
-                tbody.innerHTML = table.map(renderRow).join('');
+                tbody.innerHTML = table.length === 0
+                    ? '<tr><td colspan="10" class="epl-empty-message">No standings yet. Add secret FOOTBALL_DATA_API_KEY in repo Settings → Secrets → Actions, then run "Update EPL standings" from the Actions tab.</td></tr>'
+                    : table.map(renderRow).join('');
                 showTable();
             })
             .catch(function (err) {
-                var msg = err.message || 'Could not load standings.';
-                if (msg === 'Failed to fetch' || err.name === 'TypeError') {
-                    msg = 'Request blocked. Use EPL_STANDINGS_JSON (GitHub-only) or a proxy.';
-                }
-                showError(msg);
+                showError(err.message || 'Could not load standings.');
             });
     }
 

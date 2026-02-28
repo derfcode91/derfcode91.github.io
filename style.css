@@ -709,9 +709,6 @@ a {
 .epl-col-pts {
     font-weight: 700;
 }
-.epl-col-form {
-    min-width: 100px;
-}
 .epl-club {
     display: flex;
     align-items: center;
@@ -749,6 +746,9 @@ a {
 }
 .epl-club-name {
     font-weight: 500;
+}
+.epl-col-form {
+    min-width: 100px;
 }
 .epl-form {
     display: flex;

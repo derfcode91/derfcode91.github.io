@@ -3,6 +3,7 @@
     var REDIRECT_URI = (typeof window !== 'undefined' && window.SPOTIFY_REDIRECT_URI) ? String(window.SPOTIFY_REDIRECT_URI).trim() : '';
     var SCOPES = 'user-top-read';
     var STORAGE_KEY = 'spotify_vibes_token';
+    var PKCE_VERIFIER_KEY = 'spotify_vibes_code_verifier';
 
     var RADAR_LABELS = [
         'acousticness',
@@ -30,18 +31,93 @@
         } catch (e) {}
     }
 
-    function getTokenFromHash() {
-        var hash = (window.location.hash || '').slice(1);
-        var params = new URLSearchParams(hash);
-        return params.get('access_token');
+    function getAuthCodeFromQuery() {
+        var params = new URLSearchParams(window.location.search);
+        return params.get('code');
     }
 
-    function clearHash() {
+    function clearQueryParams() {
         if (window.history.replaceState) {
-            window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        } else {
-            window.location.hash = '';
+            window.history.replaceState(null, '', window.location.pathname);
         }
+    }
+
+    function getStoredCodeVerifier() {
+        try {
+            return sessionStorage.getItem(PKCE_VERIFIER_KEY);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function setStoredCodeVerifier(v) {
+        try {
+            sessionStorage.setItem(PKCE_VERIFIER_KEY, v);
+        } catch (e) {}
+    }
+
+    function clearStoredCodeVerifier() {
+        try {
+            sessionStorage.removeItem(PKCE_VERIFIER_KEY);
+        } catch (e) {}
+    }
+
+    function base64UrlEncode(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function generateCodeVerifier() {
+        var array = new Uint8Array(32);
+        if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+            crypto.getRandomValues(array);
+        } else {
+            for (var i = 0; i < 32; i++) array[i] = Math.floor(Math.random() * 256);
+        }
+        return base64UrlEncode(array);
+    }
+
+    function sha256(str) {
+        return new Promise(function (resolve, reject) {
+            var encoder = new TextEncoder();
+            var data = encoder.encode(str);
+            if (typeof crypto !== 'undefined' && crypto.subtle && crypto.subtle.digest) {
+                crypto.subtle.digest('SHA-256', data).then(resolve).catch(reject);
+            } else {
+                reject(new Error('PKCE requires crypto.subtle'));
+            }
+        });
+    }
+
+    function buildCodeChallenge(verifier) {
+        return sha256(verifier).then(function (hash) {
+            return base64UrlEncode(hash);
+        });
+    }
+
+    function exchangeCodeForToken(code, codeVerifier) {
+        var uri = REDIRECT_URI || (window.location.origin + window.location.pathname);
+        var body = new URLSearchParams({
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: uri,
+            client_id: CLIENT_ID,
+            code_verifier: codeVerifier
+        });
+        return fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString()
+        }).then(function (res) {
+            if (!res.ok) return res.json().then(function (err) {
+                throw new Error(err.error_description || err.error || 'Token exchange failed');
+            });
+            return res.json();
+        }).then(function (data) {
+            return data.access_token;
+        });
     }
 
     function showConnect() {
@@ -269,26 +345,45 @@
             showError('Spotify Client ID is not set. Add your Client ID in the script config (see my-vibes.html).');
             return;
         }
-        var base = 'https://accounts.spotify.com/authorize';
-        var params = new URLSearchParams({
-            client_id: CLIENT_ID,
-            response_type: 'token',
-            redirect_uri: REDIRECT_URI || (window.location.origin + window.location.pathname),
-            scope: SCOPES,
-            show_dialog: 'true'
+        var verifier = generateCodeVerifier();
+        setStoredCodeVerifier(verifier);
+        buildCodeChallenge(verifier).then(function (challenge) {
+            var uri = REDIRECT_URI || (window.location.origin + window.location.pathname);
+            var params = new URLSearchParams({
+                client_id: CLIENT_ID,
+                response_type: 'code',
+                redirect_uri: uri,
+                scope: SCOPES,
+                code_challenge_method: 'S256',
+                code_challenge: challenge,
+                show_dialog: 'true'
+            });
+            window.location.href = 'https://accounts.spotify.com/authorize?' + params.toString();
+        }).catch(function (err) {
+            showError(err.message || 'Could not start Spotify login.');
         });
-        window.location.href = base + '?' + params.toString();
     }
 
     function init() {
         var connectBtn = document.getElementById('spotify-connect-btn');
         if (connectBtn) connectBtn.addEventListener('click', connectClick);
 
-        var tokenFromHash = getTokenFromHash();
-        if (tokenFromHash) {
-            setStoredToken(tokenFromHash);
-            clearHash();
-            runWithToken(tokenFromHash);
+        var code = getAuthCodeFromQuery();
+        if (code) {
+            var verifier = getStoredCodeVerifier();
+            clearQueryParams();
+            clearStoredCodeVerifier();
+            if (!verifier) {
+                showError('Session expired. Please click Connect Spotify again.');
+                return;
+            }
+            showLoading();
+            exchangeCodeForToken(code, verifier).then(function (token) {
+                setStoredToken(token);
+                runWithToken(token);
+            }).catch(function (err) {
+                showError(err.message || 'Failed to connect. Try again.');
+            });
             return;
         }
 

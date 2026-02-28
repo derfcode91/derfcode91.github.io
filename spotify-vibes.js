@@ -156,12 +156,13 @@
             headers: { 'Authorization': 'Bearer ' + token }
         }).then(function (res) {
             if (!res.ok) {
-                return res.json().then(function (body) {
-                    var msg = (body && body.error_description) || (body && body.error) || ('Spotify API error: ' + res.status);
+                return res.text().then(function (text) {
+                    var msg = 'Spotify API error: ' + res.status;
+                    try {
+                        var body = text ? JSON.parse(text) : {};
+                        msg = (body.error_description) || (body.error) || msg;
+                    } catch (e) {}
                     throw new Error(msg);
-                }).catch(function (e) {
-                    if (e.message && e.message.indexOf('Spotify') === -1) throw new Error('Spotify API error: ' + res.status);
-                    throw e;
                 });
             }
             return res.json();
@@ -347,7 +348,9 @@
                 setStoredToken('');
                 var msg = err.message || 'Failed to load Spotify data. Try connecting again.';
                 if (msg.toLowerCase().indexOf('premium') !== -1) {
-                    msg = 'Spotify Premium required. The account you connected doesn’t have Premium. Top artists and music taste use the Web API, which Spotify only allows for Premium accounts. Connect with a Premium account or upgrade at spotify.com.';
+                    msg = 'Spotify Premium required. The account you connected doesn’t have Premium. Connect with a Premium account or upgrade at spotify.com.';
+                } else if (msg.indexOf('403') !== -1) {
+                    msg = 'Access denied (403). Make sure the Spotify account you connected is (1) in your app’s User Management (Dashboard → your app → User Management) and (2) has Premium. If you just added Premium, wait a minute and click Try again, then Connect Spotify.';
                 }
                 showError(msg);
             });

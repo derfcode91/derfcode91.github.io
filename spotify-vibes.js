@@ -217,6 +217,35 @@
         return out;
     }
 
+    function getGenresFromArtists(artists) {
+        var count = {};
+        (artists || []).forEach(function (a) {
+            (a.genres || []).forEach(function (g) {
+                var key = String(g).trim();
+                if (key) count[key] = (count[key] || 0) + 1;
+            });
+        });
+        return Object.keys(count)
+            .map(function (name) { return { name: name, count: count[name] }; })
+            .sort(function (a, b) { return b.count - a.count; })
+            .slice(0, 15);
+    }
+
+    function renderGenres(artists) {
+        var container = document.getElementById('spotify-genres');
+        var wrap = document.getElementById('spotify-genres-wrap');
+        if (!container) return;
+        var list = getGenresFromArtists(artists);
+        if (!list.length) {
+            container.innerHTML = '<p class="spotify-genres-empty">No genre data from top artists.</p>';
+            return;
+        }
+        container.innerHTML = list.map(function (g) {
+            var name = (g.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return '<span class="spotify-genre-tag" title="' + g.count + ' artist(s)">' + name + '</span>';
+        }).join('');
+    }
+
     function renderArtists(artists) {
         var container = document.getElementById('spotify-artists');
         if (!container) return;
@@ -348,14 +377,20 @@
             .then(function (data) {
                 renderArtists(data.artists);
                 var canvas = document.getElementById('spotify-radar');
-                var fallback = document.getElementById('spotify-radar-fallback');
+                var genresWrap = document.getElementById('spotify-genres-wrap');
+                var tasteDesc = document.getElementById('spotify-taste-desc');
                 if (data.avgFeatures) {
                     drawRadar('spotify-radar', data.avgFeatures);
                     if (canvas) canvas.style.display = '';
-                    if (fallback) fallback.style.display = 'none';
+                    if (genresWrap) genresWrap.style.display = 'none';
+                    if (tasteDesc) tasteDesc.textContent = 'Averages from your top tracks (energy, danceability, etc.).';
                 } else {
                     if (canvas) canvas.style.display = 'none';
-                    if (fallback) fallback.style.display = '';
+                    if (genresWrap) {
+                        genresWrap.style.display = '';
+                        renderGenres(data.artists);
+                    }
+                    if (tasteDesc) tasteDesc.textContent = 'Based on genres from your top artists.';
                 }
                 showContent();
             })

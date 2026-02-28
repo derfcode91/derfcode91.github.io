@@ -906,12 +906,48 @@ a {
     max-width: 100%;
     height: auto;
 }
-.spotify-radar-fallback {
+.spotify-genres-wrap {
+    padding: 16px;
+    text-align: center;
+}
+.spotify-genres-wrap .spotify-radar-fallback {
+    margin: 0 0 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 0;
+}
+.spotify-genres-title {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.spotify-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+.spotify-genre-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background-color: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 12px;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.spotify-genre-tag:hover {
+    background-color: rgba(29, 185, 84, 0.15);
+    border-color: rgba(29, 185, 84, 0.4);
+    color: var(--text-primary);
+}
+.spotify-genres-empty {
     margin: 0;
     font-size: 13px;
     color: var(--text-secondary);
-    text-align: center;
-    padding: 24px 16px;
 }
 .spotify-loading,
 .spotify-error-wrap {

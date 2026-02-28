@@ -66,10 +66,14 @@
                 <div class="spotify-right">
                     <h3 class="spotify-panel-title">MUSIC TASTE</h3>
                     <h4 class="spotify-panel-name">Audio profile</h4>
-                    <p class="spotify-panel-desc">Averages from your top tracks (energy, danceability, etc.).</p>
+                    <p class="spotify-panel-desc" id="spotify-taste-desc">Averages from your top tracks (energy, danceability, etc.).</p>
                     <div id="spotify-radar-wrap" class="spotify-radar-wrap">
                         <canvas id="spotify-radar" class="spotify-radar" width="400" height="400"></canvas>
-                        <p id="spotify-radar-fallback" class="spotify-radar-fallback" style="display: none;">Music taste graph is not available with the current Spotify Web API.</p>
+                        <div id="spotify-genres-wrap" class="spotify-genres-wrap" style="display: none;">
+                            <p class="spotify-radar-fallback">Based on your top artists — no audio-features data with current API.</p>
+                            <p class="spotify-genres-title">Your top genres</p>
+                            <div id="spotify-genres" class="spotify-genres"></div>
+                        </div>
                     </div>
                 </div>
             </div>

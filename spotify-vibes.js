@@ -4,6 +4,7 @@
     var SCOPES = 'user-top-read user-read-private';
     var STORAGE_KEY = 'spotify_vibes_token';
     var PKCE_VERIFIER_KEY = 'spotify_vibes_code_verifier';
+    var STATIC_VIBES_JSON = (typeof window !== 'undefined' && window.SPOTIFY_VIBES_JSON) ? String(window.SPOTIFY_VIBES_JSON).trim() : 'data/spotify-vibes.json';
 
     var RADAR_LABELS = [
         'acousticness',
@@ -150,6 +151,32 @@
         document.getElementById('spotify-loading').style.display = 'none';
         document.getElementById('spotify-error').style.display = 'none';
         document.getElementById('spotify-content').style.display = '';
+    }
+
+    function showContentFromStatic(displayName, artists, tracks) {
+        var panelName = document.getElementById('spotify-panel-name');
+        if (panelName && displayName) panelName.textContent = 'Top artists for ' + displayName;
+        renderArtists(artists || []);
+        renderMostPlayed(tracks || []);
+        showContent();
+        var hint = document.getElementById('spotify-static-hint');
+        if (hint) hint.style.display = '';
+        var exportWrap = document.getElementById('spotify-export-wrap');
+        if (exportWrap) exportWrap.style.display = 'none';
+    }
+
+    function loadStaticVibes() {
+        return fetch(STATIC_VIBES_JSON)
+            .then(function (res) {
+                if (!res.ok) return null;
+                return res.json();
+            })
+            .then(function (data) {
+                if (!data || (!(data.artists && data.artists.length) && !(data.tracks && data.tracks.length))) return false;
+                showContentFromStatic(data.displayName || '', data.artists || [], data.tracks || []);
+                return true;
+            })
+            .catch(function () { return false; });
     }
 
     function apiFetch(url, token) {
@@ -401,16 +428,23 @@
                                 if (f) allFeatures.push(f);
                             });
                         });
-                        return { artists: artists, tracks: tracks, avgFeatures: normalizeFeatures(allFeatures) };
+                        return { artists: artists, tracks: tracks, avgFeatures: normalizeFeatures(allFeatures), displayName: me && me.display_name ? me.display_name : '' };
                     })
                     .catch(function () {
-                        return { artists: artists, tracks: tracks, avgFeatures: null };
+                        return { artists: artists, tracks: tracks, avgFeatures: null, displayName: me && me.display_name ? me.display_name : '' };
                     });
             })
             .then(function (data) {
+                if (typeof window !== 'undefined') {
+                    window.__spotifyLastVibe = { displayName: data.displayName || '', artists: data.artists || [], tracks: data.tracks || [] };
+                }
                 renderArtists(data.artists);
                 renderMostPlayed(data.tracks || []);
                 showContent();
+                var hint = document.getElementById('spotify-static-hint');
+                if (hint) hint.style.display = 'none';
+                var exportWrap = document.getElementById('spotify-export-wrap');
+                if (exportWrap) exportWrap.style.display = '';
             })
             .catch(function (err) {
                 setStoredToken('');
@@ -455,11 +489,30 @@
         showConnect();
     }
 
+    function exportVibeForVisitors() {
+        var vibe = typeof window !== 'undefined' && window.__spotifyLastVibe;
+        if (!vibe || (!(vibe.artists && vibe.artists.length) && !(vibe.tracks && vibe.tracks.length))) return;
+        var json = JSON.stringify({ displayName: vibe.displayName || '', artists: vibe.artists, tracks: vibe.tracks }, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'spotify-vibes.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
     function init() {
         var connectBtn = document.getElementById('spotify-connect-btn');
         if (connectBtn) connectBtn.addEventListener('click', connectClick);
         var tryAgainBtn = document.getElementById('spotify-try-again-btn');
         if (tryAgainBtn) tryAgainBtn.addEventListener('click', clearAndShowConnect);
+        var exportBtn = document.getElementById('spotify-export-btn');
+        if (exportBtn) exportBtn.addEventListener('click', exportVibeForVisitors);
+        var staticHint = document.getElementById('spotify-static-hint');
+        if (staticHint) {
+            var link = staticHint.querySelector('.spotify-static-hint-link');
+            if (link) link.addEventListener('click', connectClick);
+        }
 
         var code = getAuthCodeFromQuery();
         if (code) {
@@ -486,7 +539,9 @@
             return;
         }
 
-        showConnect();
+        loadStaticVibes().then(function (shown) {
+            if (!shown) showConnect();
+        });
     }
 
     if (document.readyState === 'loading') {

@@ -345,7 +345,11 @@
             })
             .catch(function (err) {
                 setStoredToken('');
-                showError(err.message || 'Failed to load Spotify data. Try connecting again.');
+                var msg = err.message || 'Failed to load Spotify data. Try connecting again.';
+                if (msg.toLowerCase().indexOf('premium') !== -1) {
+                    msg = 'Spotify Premium required. The account you connected doesn’t have Premium. Top artists and music taste use the Web API, which Spotify only allows for Premium accounts. Connect with a Premium account or upgrade at spotify.com.';
+                }
+                showError(msg);
             });
     }
 

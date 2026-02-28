@@ -39,9 +39,45 @@
 
 <main class="page-wrapper">
     <h1 class="page-title">My Vibes</h1>
-    <p class="page-subtitle">Coming soon.</p>
+    <p class="page-subtitle">Things I follow and care about.</p>
+
+    <section class="card epl-section" style="margin-top: 16px;">
+        <div class="card-header">
+            <h2 class="card-title">Premier League</h2>
+            <span class="card-subtitle epl-attribution">Live standings · <a href="https://www.football-data.org/" target="_blank" rel="noopener noreferrer" class="mini-link">Data by football-data.org</a></span>
+        </div>
+        <div id="epl-loading" class="epl-loading">Loading table…</div>
+        <div id="epl-error" class="epl-error" style="display: none;"></div>
+        <div id="epl-standings" class="epl-standings" style="display: none;">
+            <table class="epl-table">
+                <thead>
+                    <tr>
+                        <th class="epl-col-club">Club</th>
+                        <th class="epl-col-num">MP</th>
+                        <th class="epl-col-num">W</th>
+                        <th class="epl-col-num">D</th>
+                        <th class="epl-col-num">L</th>
+                        <th class="epl-col-num">GF</th>
+                        <th class="epl-col-num">GA</th>
+                        <th class="epl-col-num">GD</th>
+                        <th class="epl-col-pts">Pts</th>
+                        <th class="epl-col-form">Last 5</th>
+                    </tr>
+                </thead>
+                <tbody id="epl-table-body"></tbody>
+            </table>
+        </div>
+    </section>
 </main>
 
+<script>
+    // Option A (recommended for GitHub Pages): Deploy api/epl-standings.js to Vercel, set env FOOTBALL_DATA_API_KEY there, then set your proxy URL below. No key in this file.
+    window.EPL_PROXY_URL = ''; // e.g. 'https://your-project.vercel.app/api/epl-standings'
+
+    // Option B: Use API key directly (often blocked by CORS when site is on GitHub Pages).
+    window.FOOTBALL_DATA_API_KEY = '';
+</script>
+<script src="epl.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

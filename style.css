@@ -659,3 +659,123 @@ a {
     text-align: center;
 }
 
+/* EPL table (My Vibes) */
+.epl-section .card-header {
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.epl-attribution {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.epl-loading,
+.epl-error {
+    padding: 16px 0;
+    color: var(--text-secondary);
+}
+.epl-error {
+    color: #f85149;
+}
+.epl-standings {
+    overflow-x: auto;
+    margin-top: 8px;
+}
+.epl-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.epl-table th,
+.epl-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.epl-table th {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+.epl-table tbody tr:hover {
+    background-color: var(--bg-hover);
+}
+.epl-col-club {
+    min-width: 160px;
+}
+.epl-col-num,
+.epl-col-pts {
+    text-align: center;
+    min-width: 36px;
+}
+.epl-col-pts {
+    font-weight: 700;
+}
+.epl-col-form {
+    min-width: 100px;
+}
+.epl-club {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.epl-rank-wrap {
+    display: flex;
+    align-items: center;
+    min-width: 28px;
+}
+.epl-rank-bar {
+    width: 4px;
+    height: 20px;
+    border-radius: 2px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+.epl-rank-bar.champions-league {
+    background: #3b82f6;
+}
+.epl-rank-bar.europa {
+    background: #f97316;
+}
+.epl-rank-bar.conference {
+    background: #8b5cf6;
+}
+.epl-rank-bar.relegation {
+    background: #ef4444;
+}
+.epl-crest {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.epl-club-name {
+    font-weight: 500;
+}
+.epl-form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+}
+.epl-form-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+.epl-form-dot.win {
+    background: #22c55e;
+    color: #fff;
+}
+.epl-form-dot.draw {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+.epl-form-dot.loss {
+    background: #ef4444;
+    color: #fff;
+}
+

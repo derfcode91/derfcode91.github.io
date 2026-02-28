@@ -72,6 +72,14 @@
             </div>
             <p id="spotify-static-hint" class="spotify-static-hint" style="display: none;"><button type="button" class="spotify-static-hint-link">Connect Spotify</button> to see your own top artists and most played.</p>
             <p id="spotify-export-wrap" class="spotify-export-wrap" style="display: none;"><button type="button" id="spotify-export-btn" class="btn-ghost btn-export">Download data for visitors</button> — Save as <code>data/spotify-vibes.json</code> so others see your vibe without logging in.</p>
+            <div id="spotify-refresh-wrap" class="spotify-refresh-wrap" style="display: none;">
+                <p class="spotify-refresh-title">For daily auto-update (no localhost needed)</p>
+                <p class="spotify-refresh-desc">Add this as GitHub Secret <code>SPOTIFY_REFRESH_TOKEN</code> (repo → Settings → Secrets → Actions):</p>
+                <div class="spotify-refresh-row">
+                    <input type="text" id="spotify-refresh-input" class="spotify-refresh-input" readonly>
+                    <button type="button" id="spotify-refresh-copy" class="btn-ghost btn-export">Copy</button>
+                </div>
+            </div>
         </div>
         <div id="spotify-loading" class="spotify-loading" style="display: none;">Loading your music…</div>
         <div id="spotify-error" class="spotify-error-wrap" style="display: none;">

@@ -1058,6 +1058,44 @@ a {
 .btn-export {
     margin-right: 4px;
 }
+.spotify-refresh-wrap {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+.spotify-refresh-title {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.spotify-refresh-desc {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.spotify-refresh-desc code {
+    font-size: 11px;
+    background: var(--bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.spotify-refresh-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.spotify-refresh-input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+}
 .spotify-loading,
 .spotify-error-wrap {
     padding: 16px 0;

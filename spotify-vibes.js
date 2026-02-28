@@ -3,6 +3,7 @@
     var REDIRECT_URI = (typeof window !== 'undefined' && window.SPOTIFY_REDIRECT_URI) ? String(window.SPOTIFY_REDIRECT_URI).trim() : '';
     var SCOPES = 'user-top-read user-read-private';
     var STORAGE_KEY = 'spotify_vibes_token';
+    var REFRESH_TOKEN_KEY = 'spotify_vibes_refresh_token';
     var PKCE_VERIFIER_KEY = 'spotify_vibes_code_verifier';
     var STATIC_VIBES_JSON = (typeof window !== 'undefined' && window.SPOTIFY_VIBES_JSON) ? String(window.SPOTIFY_VIBES_JSON).trim() : 'data/spotify-vibes.json';
 
@@ -117,7 +118,10 @@
             });
             return res.json();
         }).then(function (data) {
-            return data.access_token;
+            if (data && data.refresh_token) {
+                try { sessionStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token); } catch (e) {}
+            }
+            return { access_token: data.access_token, refresh_token: data.refresh_token };
         });
     }
 
@@ -163,6 +167,8 @@
         if (hint) hint.style.display = '';
         var exportWrap = document.getElementById('spotify-export-wrap');
         if (exportWrap) exportWrap.style.display = 'none';
+        var refreshWrap = document.getElementById('spotify-refresh-wrap');
+        if (refreshWrap) refreshWrap.style.display = 'none';
     }
 
     function loadStaticVibes() {
@@ -445,6 +451,15 @@
                 if (hint) hint.style.display = 'none';
                 var exportWrap = document.getElementById('spotify-export-wrap');
                 if (exportWrap) exportWrap.style.display = '';
+                var refreshWrap = document.getElementById('spotify-refresh-wrap');
+                var refreshInput = document.getElementById('spotify-refresh-input');
+                try {
+                    var rt = sessionStorage.getItem(REFRESH_TOKEN_KEY);
+                    if (refreshWrap && refreshInput && rt) {
+                        refreshInput.value = rt;
+                        refreshWrap.style.display = '';
+                    }
+                } catch (e) {}
             })
             .catch(function (err) {
                 setStoredToken('');
@@ -508,6 +523,20 @@
         if (tryAgainBtn) tryAgainBtn.addEventListener('click', clearAndShowConnect);
         var exportBtn = document.getElementById('spotify-export-btn');
         if (exportBtn) exportBtn.addEventListener('click', exportVibeForVisitors);
+        var refreshCopyBtn = document.getElementById('spotify-refresh-copy');
+        if (refreshCopyBtn) {
+            refreshCopyBtn.addEventListener('click', function () {
+                var input = document.getElementById('spotify-refresh-input');
+                if (!input || !input.value) return;
+                input.select();
+                input.setSelectionRange(0, 99999);
+                try {
+                    navigator.clipboard.writeText(input.value);
+                    refreshCopyBtn.textContent = 'Copied!';
+                    setTimeout(function () { refreshCopyBtn.textContent = 'Copy'; }, 2000);
+                } catch (e) {}
+            });
+        }
         var staticHint = document.getElementById('spotify-static-hint');
         if (staticHint) {
             var link = staticHint.querySelector('.spotify-static-hint-link');
@@ -524,7 +553,9 @@
                 return;
             }
             showLoading();
-            exchangeCodeForToken(code, verifier).then(function (token) {
+            exchangeCodeForToken(code, verifier).then(function (data) {
+                var token = data && data.access_token;
+                if (!token) return Promise.reject(new Error('No access token'));
                 setStoredToken(token);
                 runWithToken(token);
             }).catch(function (err) {

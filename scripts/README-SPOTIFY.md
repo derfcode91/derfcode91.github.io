@@ -8,25 +8,16 @@ The GitHub Action **Update Spotify vibes** runs **daily** and updates `data/spot
 
 You need a **refresh token** so the Action can get a new access token each run (Spotify access tokens expire after 1 hour).
 
-1. In [Spotify Dashboard](https://developer.spotify.com/dashboard) → your app → **Edit Settings** → **Redirect URIs**  
-   Add: `http://localhost:3000/callback`  
-   Save.
+**Option A – From your website (no localhost, recommended)**  
+1. Open **https://derfcode91.github.io/my-vibes.html** (or your live My Vibes page).  
+2. Click **Connect Spotify** and log in with your account.  
+3. After your card loads, scroll down. If a **“For daily auto-update”** section appears with a long token, click **Copy** and use that as the refresh token.  
+4. If you don’t see that section, click **Try again** then **Connect Spotify** once more (Spotify sometimes sends the refresh token on the first authorization).
 
-2. In a terminal (from the repo root):
-
-   ```bash
-   # Windows (PowerShell)
-   $env:SPOTIFY_CLIENT_ID="your-client-id"; $env:SPOTIFY_CLIENT_SECRET="your-client-secret"; node scripts/get-spotify-refresh-token.js
-
-   # Mac/Linux
-   SPOTIFY_CLIENT_ID=your-client-id SPOTIFY_CLIENT_SECRET=your-client-secret node scripts/get-spotify-refresh-token.js
-   ```
-
-   Use the **Client ID** and **Client Secret** from your app’s dashboard.
-
-3. A browser window will open. Log in with Spotify and approve. The script will print a **refresh token** (and show it in the browser). Copy it.
-
-4. (Optional) Remove `http://localhost:3000/callback` from Redirect URIs in the dashboard if you don’t need it anymore.
+**Option B – Local script (if your dashboard allows localhost)**  
+1. In [Spotify Dashboard](https://developer.spotify.com/dashboard) → your app → **Edit Settings** → **Redirect URIs** add `http://localhost:3000/callback` and save.  
+2. Run: `SPOTIFY_CLIENT_ID=xxx SPOTIFY_CLIENT_SECRET=yyy node scripts/get-spotify-refresh-token.js`  
+3. Log in in the browser and copy the printed refresh token.
 
 ### 2. Add GitHub secrets
 

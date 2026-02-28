@@ -140,7 +140,8 @@
         document.getElementById('spotify-loading').style.display = 'none';
         var wrap = document.getElementById('spotify-error');
         var textEl = document.getElementById('spotify-error-text');
-        if (textEl) textEl.textContent = msg;
+        var str = typeof msg === 'string' ? msg : (msg && (msg.error_description || msg.message || msg.error)) ? String(msg.error_description || msg.message || msg.error) : 'Something went wrong. Try again.';
+        if (textEl) textEl.textContent = str;
         if (wrap) wrap.style.display = '';
     }
 
@@ -346,10 +347,11 @@
             })
             .catch(function (err) {
                 setStoredToken('');
-                var msg = err.message || 'Failed to load Spotify data. Try connecting again.';
-                if (msg.toLowerCase().indexOf('premium') !== -1) {
+                var raw = (err && typeof err.message === 'string') ? err.message : (err && (err.error_description || err.error)) ? String(err.error_description || err.error) : 'Failed to load Spotify data. Try connecting again.';
+                var msg = raw;
+                if (typeof msg === 'string' && msg.toLowerCase().indexOf('premium') !== -1) {
                     msg = 'Spotify Premium required. The account you connected doesn’t have Premium. Connect with a Premium account or upgrade at spotify.com.';
-                } else if (msg.indexOf('403') !== -1) {
+                } else if (typeof msg === 'string' && msg.indexOf('403') !== -1) {
                     msg = 'Access denied (403). Make sure the Spotify account you connected is (1) in your app’s User Management (Dashboard → your app → User Management) and (2) has Premium. If you just added Premium, wait a minute and click Try again, then Connect Spotify.';
                 }
                 showError(msg);

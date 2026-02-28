@@ -251,6 +251,34 @@
         }).join('');
     }
 
+    function renderMostPlayed(tracks) {
+        var container = document.getElementById('spotify-tracks-grid');
+        if (!container) return;
+        var list = (tracks || []).slice(0, 6);
+        if (!list.length) {
+            container.innerHTML = '<p class="spotify-tracks-empty">No tracks to show.</p>';
+            return;
+        }
+        container.innerHTML = list.map(function (t, i) {
+            var img = (t.album && t.album.images && t.album.images[0]) ? t.album.images[0].url : '';
+            var url = (t.external_urls && t.external_urls.spotify) ? t.external_urls.spotify : '#';
+            var title = (t.name || 'Track').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            var artistNames = (t.artists || []).map(function (a) { return a.name || ''; }).filter(Boolean).join(', ');
+            if (artistNames.length > 35) artistNames = artistNames.slice(0, 32) + '…';
+            artistNames = artistNames.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return (
+                '<a class="spotify-track-card" href="' + url + '" target="_blank" rel="noopener noreferrer">' +
+                '<div class="spotify-track-card-img-wrap">' +
+                (img ? '<img class="spotify-track-card-img" src="' + img + '" alt="" loading="lazy">' : '') +
+                '<span class="spotify-track-card-badge">' + (i + 1) + '</span>' +
+                '</div>' +
+                '<p class="spotify-track-card-title">' + title + '</p>' +
+                '<p class="spotify-track-card-artists">' + (artistNames || '—') + '</p>' +
+                '</a>'
+            );
+        }).join('');
+    }
+
     function renderArtists(artists) {
         var container = document.getElementById('spotify-artists');
         if (!container) return;
@@ -373,36 +401,15 @@
                                 if (f) allFeatures.push(f);
                             });
                         });
-                        return { artists: artists, avgFeatures: normalizeFeatures(allFeatures) };
+                        return { artists: artists, tracks: tracks, avgFeatures: normalizeFeatures(allFeatures) };
                     })
                     .catch(function () {
-                        // Fetch full artist details (GET /artists/{id}) so we get genres; top/artists may omit them
-                        var ids = artists.map(function (a) { return a.id; }).filter(Boolean);
-                        return Promise.all(ids.map(function (id) {
-                            return getArtist(token, id).catch(function () { return null; });
-                        })).then(function (fullArtists) {
-                            return { artists: artists, avgFeatures: null, artistsForGenres: fullArtists.filter(Boolean) };
-                        });
+                        return { artists: artists, tracks: tracks, avgFeatures: null };
                     });
             })
             .then(function (data) {
                 renderArtists(data.artists);
-                var canvas = document.getElementById('spotify-radar');
-                var genresWrap = document.getElementById('spotify-genres-wrap');
-                var tasteDesc = document.getElementById('spotify-taste-desc');
-                if (data.avgFeatures) {
-                    drawRadar('spotify-radar', data.avgFeatures);
-                    if (canvas) canvas.style.display = '';
-                    if (genresWrap) genresWrap.style.display = 'none';
-                    if (tasteDesc) tasteDesc.textContent = 'Averages from your top tracks (energy, danceability, etc.).';
-                } else {
-                    if (canvas) canvas.style.display = 'none';
-                    if (genresWrap) {
-                        genresWrap.style.display = '';
-                        renderGenres(data.artistsForGenres && data.artistsForGenres.length ? data.artistsForGenres : data.artists);
-                    }
-                    if (tasteDesc) tasteDesc.textContent = 'Based on genres from your top artists.';
-                }
+                renderMostPlayed(data.tracks || []);
                 showContent();
             })
             .catch(function (err) {

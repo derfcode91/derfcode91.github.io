@@ -47,10 +47,10 @@
                 <i class='bx bxl-spotify' style="color: #1db954; font-size: 28px;"></i>
                 My Music Vibe
             </h2>
-            <span class="card-subtitle spotify-attribution">Top artists · Music taste · <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="mini-link">Spotify API</a></span>
+            <span class="card-subtitle spotify-attribution">Top artists · Most played · <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="mini-link">Spotify API</a></span>
         </div>
         <div id="spotify-connect-wrap" class="spotify-connect-wrap">
-            <p class="spotify-connect-text">Connect your Spotify to show your top 5 artists and a graph of your music taste.</p>
+            <p class="spotify-connect-text">Connect your Spotify to show your top 5 artists and most played tracks.</p>
             <button type="button" id="spotify-connect-btn" class="btn-primary btn-spotify">
                 <i class='bx bxl-spotify'></i> Connect Spotify
             </button>
@@ -64,17 +64,10 @@
                     <div id="spotify-artists" class="spotify-artists"></div>
                 </div>
                 <div class="spotify-right">
-                    <h3 class="spotify-panel-title">MUSIC TASTE</h3>
-                    <h4 class="spotify-panel-name">Audio profile</h4>
-                    <p class="spotify-panel-desc" id="spotify-taste-desc">Averages from your top tracks (energy, danceability, etc.).</p>
-                    <div id="spotify-radar-wrap" class="spotify-radar-wrap">
-                        <canvas id="spotify-radar" class="spotify-radar" width="400" height="400"></canvas>
-                        <div id="spotify-genres-wrap" class="spotify-genres-wrap" style="display: none;">
-                            <p class="spotify-radar-fallback">Based on your top artists — no audio-features data with current API.</p>
-                            <p class="spotify-genres-title">Your top genres</p>
-                            <div id="spotify-genres" class="spotify-genres"></div>
-                        </div>
-                    </div>
+                    <h3 class="spotify-panel-title">MADE FOR YOU</h3>
+                    <h4 class="spotify-panel-name" id="spotify-mostplayed-name">Most played</h4>
+                    <p class="spotify-panel-desc">Your most played tracks based on recent listening.</p>
+                    <div id="spotify-tracks-grid" class="spotify-tracks-grid"></div>
                 </div>
             </div>
         </div>

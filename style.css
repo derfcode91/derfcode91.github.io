@@ -949,6 +949,85 @@ a {
     font-size: 13px;
     color: var(--text-secondary);
 }
+
+/* Most played – album-style track cards */
+.spotify-tracks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+}
+@media (min-width: 500px) {
+    .spotify-tracks-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+.spotify-track-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+}
+.spotify-track-card:hover {
+    transform: scale(1.02);
+}
+.spotify-track-card:hover .spotify-track-card-title {
+    color: #1db954;
+}
+.spotify-track-card-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+}
+.spotify-track-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.spotify-track-card-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(29, 185, 84, 0.95);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+.spotify-track-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--text-primary);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.spotify-track-card-artists {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.spotify-tracks-empty {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 24px 0;
+}
 .spotify-loading,
 .spotify-error-wrap {
     padding: 16px 0;

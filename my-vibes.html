@@ -71,11 +71,9 @@
 </main>
 
 <script>
-    // Option A (recommended for GitHub Pages): Deploy api/epl-standings.js to Vercel, set env FOOTBALL_DATA_API_KEY there, then set your proxy URL below. No key in this file.
-    window.EPL_PROXY_URL = ''; // e.g. 'https://your-project.vercel.app/api/epl-standings'
-
-    // Option B: Use API key directly (often blocked by CORS when site is on GitHub Pages).
-    window.FOOTBALL_DATA_API_KEY = '';
+    // GitHub-only: page loads standings from data/epl-standings.json (updated by the "Update EPL standings" Action).
+    // Add repo secret FOOTBALL_DATA_API_KEY, then run the workflow once from the Actions tab.
+    window.EPL_STANDINGS_JSON = 'data/epl-standings.json';
 </script>
 <script src="epl.js"></script>
 <script src="script.js"></script>

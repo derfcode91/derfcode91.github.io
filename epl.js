@@ -12,6 +12,11 @@
         return (u != null && u !== '') ? String(u).trim() : '';
     }
 
+    function getStaticJsonPath() {
+        var p = window.EPL_STANDINGS_JSON;
+        return (p != null && p !== '') ? String(p).trim() : '';
+    }
+
     function showLoading() {
         var loading = document.getElementById('epl-loading');
         var error = document.getElementById('epl-error');
@@ -104,22 +109,24 @@
         var tbody = document.getElementById('epl-table-body');
         if (!tbody) return;
 
+        var staticPath = getStaticJsonPath();
         var proxyUrl = getProxyUrl();
         var key = getApiKey();
-        if (!proxyUrl && !key) {
-            showError('Set EPL_PROXY_URL (recommended) or FOOTBALL_DATA_API_KEY in my-vibes.html. See api/epl-standings.js for proxy setup.');
+        if (!staticPath && !proxyUrl && !key) {
+            showError('Set EPL_STANDINGS_JSON (e.g. data/epl-standings.json) or add FOOTBALL_DATA_API_KEY and run the GitHub Action once.');
             return;
         }
 
         showLoading();
 
-        var fetchUrl = proxyUrl || PL_STANDINGS;
+        var fetchUrl = staticPath || proxyUrl || PL_STANDINGS;
         var fetchOpts = { method: 'GET' };
-        if (!proxyUrl && key) fetchOpts.headers = { 'X-Auth-Token': key };
+        if (!staticPath && !proxyUrl && key) fetchOpts.headers = { 'X-Auth-Token': key };
 
         fetch(fetchUrl, fetchOpts)
             .then(function (res) {
                 if (!res.ok) {
+                    if (res.status === 404 && staticPath) return Promise.reject(new Error('Standings file not ready yet. Run the "Update EPL standings" workflow once (Actions tab), or wait for the next scheduled update.'));
                     if (res.status === 401) return Promise.reject(new Error('Invalid API key'));
                     if (res.status === 429) return Promise.reject(new Error('Too many requests; try again later'));
                     return res.json().then(function (data) { throw new Error(data.message || 'Request failed'); }).catch(function (e) {
@@ -137,7 +144,7 @@
             .catch(function (err) {
                 var msg = err.message || 'Could not load standings.';
                 if (msg === 'Failed to fetch' || err.name === 'TypeError') {
-                    msg = 'Request blocked (often CORS). Use the proxy: deploy api/epl-standings.js to Vercel, set FOOTBALL_DATA_API_KEY there, then set EPL_PROXY_URL in my-vibes.html to your /api/epl-standings URL.';
+                    msg = 'Request blocked. Use EPL_STANDINGS_JSON (GitHub-only) or a proxy.';
                 }
                 showError(msg);
             });

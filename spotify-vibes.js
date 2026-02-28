@@ -1,0 +1,309 @@
+(function () {
+    var CLIENT_ID = (typeof window !== 'undefined' && window.SPOTIFY_CLIENT_ID) ? String(window.SPOTIFY_CLIENT_ID).trim() : '';
+    var REDIRECT_URI = (typeof window !== 'undefined' && window.SPOTIFY_REDIRECT_URI) ? String(window.SPOTIFY_REDIRECT_URI).trim() : '';
+    var SCOPES = 'user-top-read';
+    var STORAGE_KEY = 'spotify_vibes_token';
+
+    var RADAR_LABELS = [
+        'acousticness',
+        'danceability',
+        'energy',
+        'instrumentalness',
+        'liveness',
+        'loudness',
+        'speechiness',
+        'tempo',
+        'valence'
+    ];
+
+    function getStoredToken() {
+        try {
+            return sessionStorage.getItem(STORAGE_KEY);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function setStoredToken(token) {
+        try {
+            sessionStorage.setItem(STORAGE_KEY, token);
+        } catch (e) {}
+    }
+
+    function getTokenFromHash() {
+        var hash = (window.location.hash || '').slice(1);
+        var params = new URLSearchParams(hash);
+        return params.get('access_token');
+    }
+
+    function clearHash() {
+        if (window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } else {
+            window.location.hash = '';
+        }
+    }
+
+    function showConnect() {
+        document.getElementById('spotify-connect-wrap').style.display = '';
+        document.getElementById('spotify-content').style.display = 'none';
+        document.getElementById('spotify-loading').style.display = 'none';
+        document.getElementById('spotify-error').style.display = 'none';
+    }
+
+    function showLoading() {
+        document.getElementById('spotify-connect-wrap').style.display = 'none';
+        document.getElementById('spotify-content').style.display = 'none';
+        document.getElementById('spotify-loading').style.display = '';
+        document.getElementById('spotify-error').style.display = 'none';
+    }
+
+    function showError(msg) {
+        document.getElementById('spotify-connect-wrap').style.display = 'none';
+        document.getElementById('spotify-content').style.display = 'none';
+        document.getElementById('spotify-loading').style.display = 'none';
+        var el = document.getElementById('spotify-error');
+        el.textContent = msg;
+        el.style.display = '';
+    }
+
+    function showContent() {
+        document.getElementById('spotify-connect-wrap').style.display = 'none';
+        document.getElementById('spotify-loading').style.display = 'none';
+        document.getElementById('spotify-error').style.display = 'none';
+        document.getElementById('spotify-content').style.display = '';
+    }
+
+    function apiFetch(url, token) {
+        return fetch(url, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        }).then(function (res) {
+            if (!res.ok) throw new Error('Spotify API error: ' + res.status);
+            return res.json();
+        });
+    }
+
+    function getMe(token) {
+        return apiFetch('https://api.spotify.com/v1/me', token);
+    }
+
+    function getTopArtists(token) {
+        return apiFetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=short_term', token);
+    }
+
+    function getTopTracks(token) {
+        return apiFetch('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=short_term', token);
+    }
+
+    function getAudioFeatures(token, ids) {
+        if (!ids.length) return Promise.resolve({ audio_features: [] });
+        return apiFetch('https://api.spotify.com/v1/audio-features?ids=' + ids.join(','), token);
+    }
+
+    function normalizeFeatures(featuresList) {
+        var sums = {};
+        var count = 0;
+        RADAR_LABELS.forEach(function (k) { sums[k] = 0; });
+
+        featuresList.forEach(function (f) {
+            if (!f) return;
+            count++;
+            if (typeof f.acousticness === 'number') sums.acousticness += f.acousticness;
+            if (typeof f.danceability === 'number') sums.danceability += f.danceability;
+            if (typeof f.energy === 'number') sums.energy += f.energy;
+            if (typeof f.instrumentalness === 'number') sums.instrumentalness += f.instrumentalness;
+            if (typeof f.liveness === 'number') sums.liveness += f.liveness;
+            if (typeof f.loudness === 'number') sums.loudness += Math.max(0, (f.loudness + 60) / 60);
+            if (typeof f.speechiness === 'number') sums.speechiness += f.speechiness;
+            if (typeof f.tempo === 'number') sums.tempo += Math.min(1, Math.max(0, (f.tempo - 50) / 150));
+            if (typeof f.valence === 'number') sums.valence += f.valence;
+        });
+
+        var out = {};
+        RADAR_LABELS.forEach(function (k) {
+            if (k === 'loudness' || k === 'tempo') {
+                out[k] = count ? sums[k] / count : 0;
+            } else {
+                out[k] = count ? sums[k] / count : 0;
+            }
+        });
+        return out;
+    }
+
+    function renderArtists(artists) {
+        var container = document.getElementById('spotify-artists');
+        if (!container) return;
+        container.innerHTML = artists.slice(0, 5).map(function (a) {
+            var img = (a.images && a.images[0] && a.images[0].url) ? a.images[0].url : '';
+            var url = (a.external_urls && a.external_urls.spotify) ? a.external_urls.spotify : '#';
+            var name = (a.name || 'Artist').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return (
+                '<a class="spotify-artist spotify-artist-link" href="' + url + '" target="_blank" rel="noopener noreferrer">' +
+                (img ? '<img class="spotify-artist-img" src="' + img + '" alt="" loading="lazy">' : '') +
+                '<span class="spotify-artist-name">' + name + '</span>' +
+                '</a>'
+            );
+        }).join('');
+    }
+
+    function drawRadar(canvasId, values) {
+        var canvas = document.getElementById(canvasId);
+        if (!canvas || !values) return;
+        var ctx = canvas.getContext('2d');
+        var w = canvas.width;
+        var h = canvas.height;
+        var cx = w / 2;
+        var cy = h / 2;
+        var radius = Math.min(w, h) / 2 - 48;
+        var axes = RADAR_LABELS;
+        var n = axes.length;
+        var step = (2 * Math.PI) / n;
+        var labelRadius = radius + 28;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Grid circles (0.2, 0.4, 0.6, 0.8, 1.0)
+        ctx.strokeStyle = 'rgba(196, 144, 176, 0.35)';
+        ctx.lineWidth = 1;
+        [0.2, 0.4, 0.6, 0.8, 1.0].forEach(function (r) {
+            ctx.beginPath();
+            for (var i = 0; i <= n; i++) {
+                var a = -Math.PI / 2 + i * step;
+                var x = cx + radius * r * Math.cos(a);
+                var y = cy + radius * r * Math.sin(a);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+        });
+
+        // Axes
+        ctx.strokeStyle = 'rgba(196, 144, 176, 0.4)';
+        ctx.lineWidth = 1;
+        for (var j = 0; j < n; j++) {
+            var angle = -Math.PI / 2 + j * step;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            ctx.stroke();
+        }
+
+        // Labels
+        ctx.fillStyle = '#c490b0';
+        ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        axes.forEach(function (label, j) {
+            var angle = -Math.PI / 2 + j * step;
+            var x = cx + labelRadius * Math.cos(angle);
+            var y = cy + labelRadius * Math.sin(angle);
+            ctx.fillText(label, x, y);
+        });
+
+        // Data polygon
+        var pts = [];
+        axes.forEach(function (key, j) {
+            var v = Math.min(1, Math.max(0, values[key] != null ? values[key] : 0));
+            var angle = -Math.PI / 2 + j * step;
+            pts.push({
+                x: cx + radius * v * Math.cos(angle),
+                y: cy + radius * v * Math.sin(angle)
+            });
+        });
+        ctx.fillStyle = 'rgba(29, 185, 84, 0.35)';
+        ctx.strokeStyle = 'rgba(29, 185, 84, 0.9)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        pts.forEach(function (p, i) {
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    function runWithToken(token) {
+        showLoading();
+        Promise.all([getMe(token), getTopArtists(token), getTopTracks(token)])
+            .then(function (results) {
+                var me = results[0];
+                var artistsRes = results[1];
+                var tracksRes = results[2];
+                var panelName = document.getElementById('spotify-panel-name');
+                if (panelName && me.display_name) panelName.textContent = 'Top artists for ' + me.display_name;
+                var artists = (artistsRes.items || []).slice(0, 5);
+                var tracks = tracksRes.items || [];
+                var trackIds = tracks.map(function (t) { return t.id; }).filter(Boolean);
+
+                var chunkSize = 100;
+                var promises = [];
+                for (var i = 0; i < trackIds.length; i += chunkSize) {
+                    promises.push(getAudioFeatures(token, trackIds.slice(i, i + chunkSize)));
+                }
+                return Promise.all(promises).then(function (featureResponses) {
+                    var allFeatures = [];
+                    featureResponses.forEach(function (r) {
+                        (r.audio_features || []).forEach(function (f) {
+                            if (f) allFeatures.push(f);
+                        });
+                    });
+                    var avgFeatures = normalizeFeatures(allFeatures);
+                    return { artists: artists, avgFeatures: avgFeatures };
+                });
+            })
+            .then(function (data) {
+                renderArtists(data.artists);
+                drawRadar('spotify-radar', data.avgFeatures);
+                showContent();
+            })
+            .catch(function (err) {
+                setStoredToken('');
+                showError(err.message || 'Failed to load Spotify data. Try connecting again.');
+            });
+    }
+
+    function connectClick() {
+        if (!CLIENT_ID) {
+            showError('Spotify Client ID is not set. Add your Client ID in the script config (see my-vibes.html).');
+            return;
+        }
+        var base = 'https://accounts.spotify.com/authorize';
+        var params = new URLSearchParams({
+            client_id: CLIENT_ID,
+            response_type: 'token',
+            redirect_uri: REDIRECT_URI || (window.location.origin + window.location.pathname),
+            scope: SCOPES,
+            show_dialog: 'true'
+        });
+        window.location.href = base + '?' + params.toString();
+    }
+
+    function init() {
+        var connectBtn = document.getElementById('spotify-connect-btn');
+        if (connectBtn) connectBtn.addEventListener('click', connectClick);
+
+        var tokenFromHash = getTokenFromHash();
+        if (tokenFromHash) {
+            setStoredToken(tokenFromHash);
+            clearHash();
+            runWithToken(tokenFromHash);
+            return;
+        }
+
+        var stored = getStoredToken();
+        if (stored) {
+            runWithToken(stored);
+            return;
+        }
+
+        showConnect();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

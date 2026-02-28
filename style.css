@@ -756,6 +756,9 @@ a {
     justify-content: flex-start;
     gap: 4px;
 }
+.epl-form-empty {
+    color: var(--text-secondary);
+}
 .epl-form-dot {
     width: 18px;
     height: 18px;

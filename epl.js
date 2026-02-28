@@ -56,7 +56,9 @@
     }
 
     function renderForm(formStr) {
-        if (!formStr || typeof formStr !== 'string') return '';
+        if (!formStr || typeof formStr !== 'string') {
+            return '<div class="epl-form epl-form-empty" title="Form not provided by API">—</div>';
+        }
         var last5 = formStr.slice(-5).toUpperCase();
         var html = '';
         for (var i = 0; i < last5.length; i++) {

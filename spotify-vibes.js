@@ -1,7 +1,7 @@
 (function () {
     var CLIENT_ID = (typeof window !== 'undefined' && window.SPOTIFY_CLIENT_ID) ? String(window.SPOTIFY_CLIENT_ID).trim() : '';
     var REDIRECT_URI = (typeof window !== 'undefined' && window.SPOTIFY_REDIRECT_URI) ? String(window.SPOTIFY_REDIRECT_URI).trim() : '';
-    var SCOPES = 'user-top-read';
+    var SCOPES = 'user-top-read user-read-private';
     var STORAGE_KEY = 'spotify_vibes_token';
     var PKCE_VERIFIER_KEY = 'spotify_vibes_code_verifier';
 
@@ -155,7 +155,15 @@
         return fetch(url, {
             headers: { 'Authorization': 'Bearer ' + token }
         }).then(function (res) {
-            if (!res.ok) throw new Error('Spotify API error: ' + res.status);
+            if (!res.ok) {
+                return res.json().then(function (body) {
+                    var msg = (body && body.error_description) || (body && body.error) || ('Spotify API error: ' + res.status);
+                    throw new Error(msg);
+                }).catch(function (e) {
+                    if (e.message && e.message.indexOf('Spotify') === -1) throw new Error('Spotify API error: ' + res.status);
+                    throw e;
+                });
+            }
             return res.json();
         });
     }

@@ -138,9 +138,10 @@
         document.getElementById('spotify-connect-wrap').style.display = 'none';
         document.getElementById('spotify-content').style.display = 'none';
         document.getElementById('spotify-loading').style.display = 'none';
-        var el = document.getElementById('spotify-error');
-        el.textContent = msg;
-        el.style.display = '';
+        var wrap = document.getElementById('spotify-error');
+        var textEl = document.getElementById('spotify-error-text');
+        if (textEl) textEl.textContent = msg;
+        if (wrap) wrap.style.display = '';
     }
 
     function showContent() {
@@ -364,9 +365,17 @@
         });
     }
 
+    function clearAndShowConnect() {
+        setStoredToken('');
+        clearStoredCodeVerifier();
+        showConnect();
+    }
+
     function init() {
         var connectBtn = document.getElementById('spotify-connect-btn');
         if (connectBtn) connectBtn.addEventListener('click', connectClick);
+        var tryAgainBtn = document.getElementById('spotify-try-again-btn');
+        if (tryAgainBtn) tryAgainBtn.addEventListener('click', clearAndShowConnect);
 
         var code = getAuthCodeFromQuery();
         if (code) {

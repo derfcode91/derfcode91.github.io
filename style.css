@@ -907,12 +907,21 @@ a {
     height: auto;
 }
 .spotify-loading,
-.spotify-error {
+.spotify-error-wrap {
     padding: 16px 0;
     font-size: 13px;
     color: var(--text-secondary);
 }
-.spotify-error {
+.spotify-error-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+#spotify-error-text {
     color: #f85149;
+}
+.btn-try-again {
+    flex-shrink: 0;
 }
 

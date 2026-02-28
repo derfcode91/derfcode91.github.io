@@ -664,6 +664,17 @@ a {
     flex-wrap: wrap;
     gap: 4px;
 }
+.epl-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.epl-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
 .epl-attribution {
     font-size: 12px;
     color: var(--text-secondary);

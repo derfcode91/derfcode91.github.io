@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,132 +8,142 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header class="header">
-    <div class="header-left">
-        <img src="/gambar/bunny_vibe.gif" alt="Bunny logo" class="logo-icon">
-        <div class="logo-text">
-            <span class="logo-text-main">Danial Erfan</span>
-            <span class="logo-text-sub">Network Security • UTM</span>
-        </div>
-    </div>
-    <nav class="navbar">
-        <a href="index.html#profile" class="nav-link">Profile</a>
-        <a href="write-ups.html" class="nav-link">Write Ups</a>
-        <a href="my-vibes.html" class="nav-link active">My Vibes</a>
-    </nav>
-    <div class="header-right">
-        <a href="https://www.linkedin.com/in/derf/" class="social-icon" aria-label="LinkedIn">
-            <i class='bx bxl-linkedin'></i>
-        </a>
-        <a href="https://github.com/derfcode91" class="social-icon" aria-label="GitHub">
-            <i class='bx bxl-github'></i>
-        </a>
-        <a href="https://www.instagram.com/derfquek/" class="social-icon" aria-label="Instagram">
-            <i class='bx bxl-instagram'></i>
-        </a>
-        <a href="https://www.utm.my/" class="social-icon" aria-label="UTM">
-            <i class='bx bxs-institution'></i>
-        </a>
-    </div>
-</header>
-
-<main class="page-wrapper">
-    <h1 class="page-title">My Vibes</h1>
-    <p class="page-subtitle">Things I follow and care about.</p>
-
-    <section class="card spotify-section" style="margin-top: 16px;">
-        <div class="card-header">
-            <h2 class="card-title spotify-title">
-                <span id="spotify-header-logo" class="spotify-logo-wrap"></span>
-                My Music
-            </h2>
-            <span class="card-subtitle spotify-attribution">Top artists · Most played · <a href="https://developer.spotify.com/documentation/web-api" target="_blank" rel="noopener noreferrer" class="mini-link">Spotify API</a></span>
-        </div>
-        <div id="spotify-connect-wrap" class="spotify-connect-wrap">
-            <p class="spotify-connect-text">Connect your Spotify to show your top 6 artists and most played tracks.</p>
-            <button type="button" id="spotify-connect-btn" class="btn-primary btn-spotify">
-                <span id="spotify-btn-logo" class="spotify-btn-logo"></span> Connect Spotify
-            </button>
-        </div>
-        <div id="spotify-content" class="spotify-content" style="display: none;">
-            <div class="spotify-grid">
-                <div class="spotify-left">
-                    <h3 class="spotify-panel-title">MADE FOR DERF</h3>
-                    <h4 class="spotify-panel-name" id="spotify-panel-name">Your Top Artists</h4>
-                    <p class="spotify-panel-desc">Your top 6 artists based on recent listening.</p>
-                    <div id="spotify-artists" class="spotify-artists"></div>
-                </div>
-                <div class="spotify-right">
-                    <h3 class="spotify-panel-title">MADE FOR DERF</h3>
-                    <h4 class="spotify-panel-name" id="spotify-mostplayed-name">Most played</h4>
-                    <p class="spotify-panel-desc">Your most played tracks based on recent listening.</p>
-                    <div id="spotify-tracks-grid" class="spotify-tracks-grid"></div>
-                </div>
-            </div>
-            <p id="spotify-static-hint" class="spotify-static-hint" style="display: none;"><button type="button" class="spotify-static-hint-link">Connect Spotify</button> to see your own top artists and most played.</p>
-            <p id="spotify-export-wrap" class="spotify-export-wrap" style="display: none;"><button type="button" id="spotify-export-btn" class="btn-ghost btn-export">Download data for visitors</button> — Save as <code>data/spotify-vibes.json</code> so others see your vibe without logging in.</p>
-            <div id="spotify-refresh-wrap" class="spotify-refresh-wrap" style="display: none;">
-                <p class="spotify-refresh-title">For daily auto-update (no localhost needed)</p>
-                <p class="spotify-refresh-desc">Add this as GitHub Secret <code>SPOTIFY_REFRESH_TOKEN</code> (repo → Settings → Secrets → Actions):</p>
-                <div class="spotify-refresh-row">
-                    <input type="text" id="spotify-refresh-input" class="spotify-refresh-input" readonly>
-                    <button type="button" id="spotify-refresh-copy" class="btn-ghost btn-export">Copy</button>
-                </div>
+    <header class="header">
+        <div class="header-left">
+            <img src="/gambar/bunny_vibe.gif" alt="Bunny logo" class="logo-icon">
+            <div class="logo-text">
+                <span class="logo-text-main">Danial Erfan</span>
+                <span class="logo-text-sub">Network Security • UTM</span>
             </div>
         </div>
-        <div id="spotify-loading" class="spotify-loading" style="display: none;">Loading your music…</div>
-        <div id="spotify-error" class="spotify-error-wrap" style="display: none;">
-            <span id="spotify-error-text"></span>
-            <button type="button" id="spotify-try-again-btn" class="btn-ghost btn-try-again">Try again</button>
+        <nav class="navbar">
+            <a href="index.html#profile" class="nav-link">Profile</a>
+            <a href="write-ups.html" class="nav-link">Write Ups</a>
+            <a href="my-vibes.html" class="nav-link active">My Vibes</a>
+        </nav>
+        <div class="header-right">
+            <a href="https://www.linkedin.com/in/danialerfan/" class="social-icon" aria-label="LinkedIn">
+                <i class='bx bxl-linkedin'></i>
+            </a>
+            <a href="https://github.com/derfcode91" class="social-icon" aria-label="GitHub">
+                <i class='bx bxl-github'></i>
+            </a>
+            <a href="https://www.instagram.com/derfquek/" class="social-icon" aria-label="Instagram">
+                <i class='bx bxl-instagram'></i>
+            </a>
+            <a href="https://www.utm.my/" class="social-icon" aria-label="UTM">
+                <i class='bx bxs-institution'></i>
+            </a>
         </div>
-    </section>
+    </header>
 
-    <section class="card epl-section" style="margin-top: 16px;">
-        <div class="card-header">
-            <h2 class="card-title epl-title">
-                <img src="/gambar/epl-logo.jpg" alt="Premier League" class="epl-logo" width="48" height="48">
-                Premier League
-            </h2>
-            <span class="card-subtitle epl-attribution">Standings · <a href="https://www.football-data.org/" target="_blank" rel="noopener noreferrer" class="mini-link">Data by football-data.org</a></span>
-        </div>
-        <div id="epl-loading" class="epl-loading">Loading table…</div>
-        <div id="epl-error" class="epl-error" style="display: none;"></div>
-        <div id="epl-standings" class="epl-standings" style="display: none;">
-            <table class="epl-table">
-                <thead>
-                    <tr>
-                        <th class="epl-col-club">Club</th>
-                        <th class="epl-col-num">MP</th>
-                        <th class="epl-col-num">W</th>
-                        <th class="epl-col-num">D</th>
-                        <th class="epl-col-num">L</th>
-                        <th class="epl-col-num">GF</th>
-                        <th class="epl-col-num">GA</th>
-                        <th class="epl-col-num">GD</th>
-                        <th class="epl-col-pts">Pts</th>
-                        <th class="epl-col-form">Last 5</th>
-                    </tr>
-                </thead>
-                <tbody id="epl-table-body"></tbody>
-            </table>
-        </div>
-    </section>
-</main>
+    <main class="page-wrapper">
+        <h1 class="page-title">My Vibes</h1>
+        <p class="page-subtitle">Things I follow and care about.</p>
 
-<script>
-    // GitHub-only: page loads standings from data/epl-standings.json (updated by the "Update EPL standings" Action).
-    // Add repo secret FOOTBALL_DATA_API_KEY, then run the workflow once from the Actions tab.
-    window.EPL_STANDINGS_JSON = 'data/epl-standings.json';
-    // Spotify: create an app at https://developer.spotify.com/dashboard and set Redirect URI to this page.
-    window.SPOTIFY_CLIENT_ID = 'ea331abd4ac34b3c8c636d648b7936c6'; // e.g. 'your-client-id'
-    window.SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
-    // Optional: use your own logo image (e.g. after uploading to /gambar/spotify-logo.png)
-    window.SPOTIFY_LOGO_URL = 'gambar/spotify-logo.png';
-</script>
-<script src="spotify-vibes.js?v=2"></script>
-<script src="epl.js"></script>
-<script src="script.js"></script>
+        <section class="card spotify-section" style="margin-top: 16px;">
+            <div class="card-header">
+                <h2 class="card-title spotify-title">
+                    <span id="spotify-header-logo" class="spotify-logo-wrap"></span>
+                    My Music
+                </h2>
+                <span class="card-subtitle spotify-attribution">Top artists · Most played · <a
+                        href="https://developer.spotify.com/documentation/web-api" target="_blank"
+                        rel="noopener noreferrer" class="mini-link">Spotify API</a></span>
+            </div>
+            <div id="spotify-connect-wrap" class="spotify-connect-wrap">
+                <p class="spotify-connect-text">Connect your Spotify to show your top 6 artists and most played tracks.
+                </p>
+                <button type="button" id="spotify-connect-btn" class="btn-primary btn-spotify">
+                    <span id="spotify-btn-logo" class="spotify-btn-logo"></span> Connect Spotify
+                </button>
+            </div>
+            <div id="spotify-content" class="spotify-content" style="display: none;">
+                <div class="spotify-grid">
+                    <div class="spotify-left">
+                        <h3 class="spotify-panel-title">MADE FOR DERF</h3>
+                        <h4 class="spotify-panel-name" id="spotify-panel-name">Your Top Artists</h4>
+                        <p class="spotify-panel-desc">Your top 6 artists based on recent listening.</p>
+                        <div id="spotify-artists" class="spotify-artists"></div>
+                    </div>
+                    <div class="spotify-right">
+                        <h3 class="spotify-panel-title">MADE FOR DERF</h3>
+                        <h4 class="spotify-panel-name" id="spotify-mostplayed-name">Most played</h4>
+                        <p class="spotify-panel-desc">Your most played tracks based on recent listening.</p>
+                        <div id="spotify-tracks-grid" class="spotify-tracks-grid"></div>
+                    </div>
+                </div>
+                <p id="spotify-static-hint" class="spotify-static-hint" style="display: none;"><button type="button"
+                        class="spotify-static-hint-link">Connect Spotify</button> to see your own top artists and most
+                    played.</p>
+                <p id="spotify-export-wrap" class="spotify-export-wrap" style="display: none;"><button type="button"
+                        id="spotify-export-btn" class="btn-ghost btn-export">Download data for visitors</button> — Save
+                    as <code>data/spotify-vibes.json</code> so others see your vibe without logging in.</p>
+                <div id="spotify-refresh-wrap" class="spotify-refresh-wrap" style="display: none;">
+                    <p class="spotify-refresh-title">For daily auto-update (no localhost needed)</p>
+                    <p class="spotify-refresh-desc">Add this as GitHub Secret <code>SPOTIFY_REFRESH_TOKEN</code> (repo →
+                        Settings → Secrets → Actions):</p>
+                    <div class="spotify-refresh-row">
+                        <input type="text" id="spotify-refresh-input" class="spotify-refresh-input" readonly>
+                        <button type="button" id="spotify-refresh-copy" class="btn-ghost btn-export">Copy</button>
+                    </div>
+                </div>
+            </div>
+            <div id="spotify-loading" class="spotify-loading" style="display: none;">Loading your music…</div>
+            <div id="spotify-error" class="spotify-error-wrap" style="display: none;">
+                <span id="spotify-error-text"></span>
+                <button type="button" id="spotify-try-again-btn" class="btn-ghost btn-try-again">Try again</button>
+            </div>
+        </section>
+
+        <section class="card epl-section" style="margin-top: 16px;">
+            <div class="card-header">
+                <h2 class="card-title epl-title">
+                    <img src="/gambar/epl-logo.jpg" alt="Premier League" class="epl-logo" width="48" height="48">
+                    Premier League
+                </h2>
+                <span class="card-subtitle epl-attribution">Standings · <a href="https://www.football-data.org/"
+                        target="_blank" rel="noopener noreferrer" class="mini-link">Data by football-data.org</a></span>
+            </div>
+            <div id="epl-loading" class="epl-loading">Loading table…</div>
+            <div id="epl-error" class="epl-error" style="display: none;"></div>
+            <div id="epl-standings" class="epl-standings" style="display: none;">
+                <table class="epl-table">
+                    <thead>
+                        <tr>
+                            <th class="epl-col-club">Club</th>
+                            <th class="epl-col-num">MP</th>
+                            <th class="epl-col-num">W</th>
+                            <th class="epl-col-num">D</th>
+                            <th class="epl-col-num">L</th>
+                            <th class="epl-col-num">GF</th>
+                            <th class="epl-col-num">GA</th>
+                            <th class="epl-col-num">GD</th>
+                            <th class="epl-col-pts">Pts</th>
+                            <th class="epl-col-form">Last 5</th>
+                        </tr>
+                    </thead>
+                    <tbody id="epl-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // GitHub-only: page loads standings from data/epl-standings.json (updated by the "Update EPL standings" Action).
+        // Add repo secret FOOTBALL_DATA_API_KEY, then run the workflow once from the Actions tab.
+        window.EPL_STANDINGS_JSON = 'data/epl-standings.json';
+        // Spotify: create an app at https://developer.spotify.com/dashboard and set Redirect URI to this page.
+        window.SPOTIFY_CLIENT_ID = 'ea331abd4ac34b3c8c636d648b7936c6'; // e.g. 'your-client-id'
+        window.SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
+        // Optional: use your own logo image (e.g. after uploading to /gambar/spotify-logo.png)
+        window.SPOTIFY_LOGO_URL = 'gambar/spotify-logo.png';
+    </script>
+    <script src="spotify-vibes.js?v=2"></script>
+    <script src="epl.js"></script>
+    <script src="script.js"></script>
 </body>
-</html>
 
+</html>
